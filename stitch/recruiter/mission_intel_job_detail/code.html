@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#6b38d4",
+                    "on-error-container": "#93000a",
+                    "secondary-container": "#8455ef",
+                    "primary-container": "#38bdf8",
+                    "primary-fixed-dim": "#7bd0ff",
+                    "inverse-surface": "#213145",
+                    "secondary-fixed": "#e9ddff",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#d3e4fe",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#5c5f61",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-primary-fixed": "#001e2c",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "on-background": "#0b1c30",
+                    "on-tertiary-container": "#414546",
+                    "surface": "#f8f9ff",
+                    "primary-fixed": "#c4e7ff",
+                    "outline": "#6e7980",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#bdc8d1",
+                    "on-secondary-fixed": "#23005c",
+                    "on-primary-container": "#004965",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-primary-fixed-variant": "#004c69",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#e0e3e5",
+                    "primary": "#00668a",
+                    "surface-container-highest": "#d3e4fe",
+                    "tertiary-container": "#afb2b4",
+                    "on-tertiary-fixed": "#191c1e",
+                    "inverse-primary": "#7bd0ff",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#fffbff",
+                    "surface-dim": "#cbdbf5",
+                    "on-error": "#ffffff",
+                    "surface-container": "#e5eeff",
+                    "on-surface-variant": "#3e484f",
+                    "background": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-tint": "#00668a",
+                    "on-surface": "#0b1c30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "unit": "8px",
+                    "margin-mobile": "16px",
+                    "container-max": "1440px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "h3": ["Space Grotesk"],
+                    "h2": ["Space Grotesk"],
+                    "h1": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "h3": ["2rem", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "h2": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "h1": ["4.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "body-md": ["1rem", {"lineHeight": "1.6", "letterSpacing": "0px", "fontWeight": "400"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.7", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background: radial-gradient(circle at top right, #e0f2fe, #f8f9ff 40%, #f0f9ff 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .aura-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(107, 56, 212, 0.08) 0%, transparent 40%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+        .inner-glow {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+        .rim-light {
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .ai-score-glow {
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+        }
+        .floating-card {
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .floating-card:hover {
+            transform: translateY(-4px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background selection:bg-primary-container/30">
+<div class="aura-mesh"></div>
+<!-- Main App Shell -->
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation (From JSON) -->
+<aside class="fixed left-6 top-6 bottom-6 w-64 rounded-[32px] border border-white/20 bg-white/10 backdrop-blur-3xl shadow-[0px_0px_50px_0px_rgba(56,189,248,0.15)] flex flex-col gap-8 p-8 h-full font-['Space_Grotesk'] tracking-tight antialiased z-50">
+<div class="flex flex-col gap-2">
+<div class="text-2xl font-bold tracking-tighter text-sky-500">IntoreAI</div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">Transcendent UI</div>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out active:scale-95 transform text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span>Intelligence</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out active:scale-95 transform bg-sky-400/10 text-sky-500 border-l-2 border-sky-400 shadow-[0px_0px_15px_rgba(56,189,248,0.2)]" href="#">
+<span class="material-symbols-outlined" data-icon="blur_on">blur_on</span>
+<span>Nebula</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out active:scale-95 transform text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span>Vault</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out active:scale-95 transform text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span>Transcend</span>
+</a>
+<a class="mt-auto flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ease-out active:scale-95 transform text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<button class="bg-primary-container text-on-primary-container py-4 px-6 rounded-2xl font-bold text-sm tracking-wide shadow-lg shadow-sky-200/50 hover:brightness-105 transition-all">
+                New Pulse
+            </button>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[320px] p-margin-desktop">
+<div class="max-w-container-max mx-auto flex gap-gutter">
+<!-- Left Column: Job DNA -->
+<section class="w-[30%] shrink-0">
+<div class="glass-panel inner-glow p-8 rounded-[32px] sticky top-margin-desktop flex flex-col gap-8">
+<div class="flex flex-col gap-2">
+<span class="text-sky-500 font-h3 text-xs uppercase tracking-widest font-bold">Ref. Pulse-992</span>
+<h1 class="font-h3 text-h3 text-on-surface">Senior Nebula Architect</h1>
+</div>
+<div class="flex flex-col gap-6">
+<div class="group">
+<h4 class="font-h3 text-sm text-slate-500 mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-sky-400 text-lg" data-icon="description">description</span>
+                                    Summary
+                                </h4>
+<p class="font-body-md text-on-surface-variant leading-relaxed text-sm">
+                                    Architecting decentralized neural interfaces for the next generation of spatial computing within the Nebula framework.
+                                </p>
+</div>
+<div class="group">
+<h4 class="font-h3 text-sm text-slate-500 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sky-400 text-lg" data-icon="psychology">psychology</span>
+                                    Skill Weights
+                                </h4>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span>Spatial Neural Nets</span>
+<span class="text-sky-500">95%</span>
+</div>
+<div class="h-1 w-full bg-slate-200/50 rounded-full overflow-hidden">
+<div class="h-full bg-sky-400 w-[95%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span>Distributed Sync</span>
+<span class="text-sky-500">82%</span>
+</div>
+<div class="h-1 w-full bg-slate-200/50 rounded-full overflow-hidden">
+<div class="h-full bg-sky-400 w-[82%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span>Rust / WASM</span>
+<span class="text-sky-500">70%</span>
+</div>
+<div class="h-1 w-full bg-slate-200/50 rounded-full overflow-hidden">
+<div class="h-full bg-sky-400 w-[70%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="group">
+<h4 class="font-h3 text-sm text-slate-500 mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-sky-400 text-lg" data-icon="target">target</span>
+                                    Core Tech Stack
+                                </h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-white/40 border border-white/60 rounded-full text-xs font-medium">Node.js</span>
+<span class="px-3 py-1 bg-white/40 border border-white/60 rounded-full text-xs font-medium">Three.js</span>
+<span class="px-3 py-1 bg-white/40 border border-white/60 rounded-full text-xs font-medium">GraphQL</span>
+<span class="px-3 py-1 bg-white/40 border border-white/60 rounded-full text-xs font-medium">WebRTC</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Talent Pool -->
+<section class="w-[70%] space-y-6">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="font-h3 text-h3 text-on-surface">Talent Pool</h2>
+<p class="text-slate-500">12 Transcendental Candidates Matched</p>
+</div>
+<div class="flex gap-2">
+<button class="p-3 rounded-2xl glass-panel text-slate-600 hover:text-sky-500 transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-3 rounded-2xl glass-panel text-slate-600 hover:text-sky-500 transition-colors">
+<span class="material-symbols-outlined" data-icon="sort">sort</span>
+</button>
+</div>
+</div>
+<!-- Elite Profile Cards Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+<!-- Profile Card 1 -->
+<div class="glass-panel inner-glow p-6 rounded-[32px] floating-card flex flex-col gap-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-6">
+<span class="px-3 py-1.5 bg-primary-container/10 text-primary font-bold text-[10px] tracking-wider uppercase rounded-full rim-light">Expert Match: Node.js</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-2xl overflow-hidden rim-light">
+<img alt="Profile photo" class="w-full h-full object-cover" data-alt="portrait of a professional man with clean-shaven face and short dark hair looking directly at camera with soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9C9ZyumJHtLRqi8fjcFKvKbFrcZhj5kkLfEIMm-NL3Cakpf2oxPv97rZKlbYXQ4hZl3Q_0EiJf6-2DkT_RYbf-UuQKkuMiOuQ8UwzfjY6WGjbC17StEBVMDbCmzhuA61nCGGf_jKnvUA0ks13tl3YE0orBwA2VqMjeFBgGFzhztUs4_2qct4qp0whxrxEqRrjvbbr8yQr4bbb5IjQUfrWAWSIYtw3iJwdRV1fridx3QiwNlMS3ASQMpNyely2AOZEgu4BKlGplKA"/>
+</div>
+<div>
+<h3 class="font-h3 text-xl text-on-surface">Alexei Vane</h3>
+<p class="text-sm text-slate-500">Lead Systems Engineer</p>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">AI Resonance</span>
+<span class="font-h3 text-5xl text-sky-500 ai-score-glow tracking-tighter">98.4</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-sky-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-sky-600">JS</div>
+<div class="w-8 h-8 rounded-full bg-violet-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-violet-600">RT</div>
+<div class="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">+4</div>
+</div>
+<button class="text-xs font-bold text-sky-500 flex items-center gap-1 hover:underline">
+                                        View Deep Profile <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Profile Card 2 -->
+<div class="glass-panel inner-glow p-6 rounded-[32px] floating-card flex flex-col gap-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-6">
+<span class="px-3 py-1.5 bg-secondary-container/10 text-secondary font-bold text-[10px] tracking-wider uppercase rounded-full rim-light">Architect Level</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-2xl overflow-hidden rim-light">
+<img alt="Profile photo" class="w-full h-full object-cover" data-alt="portrait of a young woman with smiling expression and long dark hair, professional headshot with bright natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7arsdDKTthIaMH3EN8HHVUEwlPQgsOcNgOZj0Pvqso6TUyxWnlIryqoxUNRNaxLJU6__bwS1O7JCg6A2COPmnPu47aVcC0fAF484IOTBfI4K5g2cawYOdR3uLf2T3nEO8Oacb5Wj-XES9wc4i88-ki-7J1qxNQ64EOSbU3EbApzDb8PXf0me7k34J9k3k3gZKxnzQUjWB8Bv8G6rNc2DlT59K-lhJogSF2RGv3TMGF7VXZ1eErVOW5_TfEZXdS5mMuBIbh3gnvN4"/>
+</div>
+<div>
+<h3 class="font-h3 text-xl text-on-surface">Elena Soros</h3>
+<p class="text-sm text-slate-500">Spatial UI Specialist</p>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">AI Resonance</span>
+<span class="font-h3 text-5xl text-sky-500 ai-score-glow tracking-tighter">94.1</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-sky-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-sky-600">3D</div>
+<div class="w-8 h-8 rounded-full bg-violet-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-violet-600">UI</div>
+<div class="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">+2</div>
+</div>
+<button class="text-xs font-bold text-sky-500 flex items-center gap-1 hover:underline">
+                                        View Deep Profile <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Profile Card 3 -->
+<div class="glass-panel inner-glow p-6 rounded-[32px] floating-card flex flex-col gap-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-6">
+<span class="px-3 py-1.5 bg-primary-container/10 text-primary font-bold text-[10px] tracking-wider uppercase rounded-full rim-light">Expert Match: WebRTC</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-2xl overflow-hidden rim-light">
+<img alt="Profile photo" class="w-full h-full object-cover" data-alt="portrait of a man with glasses and short beard, wearing casual professional attire, soft bokeh background of a modern office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXHHIaaNrlnGq_8QMhCCkQk1wvArvhyVX3B2vXJOarpvvbbCybsEHjN5LEmot486LwAe2rR7jNFSwDi1BSfsMfegnu0m1es444xRRGNQ0lGYcPr99HlO9YRg8reAZxK7ugSTPSNn0Wt7a5eslowlYt75yqF6ckFb_xuYLohbq6fHPuzQ58ks94Mrv6WErMLic3SmhdSk49m3z7tKVxDEVGo_lbczQlt0fzIir4p5lGwLsdDyJNFmfq5R38lBtF3o8ixmSTHUGRZE4"/>
+</div>
+<div>
+<h3 class="font-h3 text-xl text-on-surface">Marcus Chen</h3>
+<p class="text-sm text-slate-500">Full Stack Architect</p>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">AI Resonance</span>
+<span class="font-h3 text-5xl text-sky-500 ai-score-glow tracking-tighter">91.8</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-sky-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-sky-600">RTC</div>
+<div class="w-8 h-8 rounded-full bg-violet-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-violet-600">GQ</div>
+<div class="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">+5</div>
+</div>
+<button class="text-xs font-bold text-sky-500 flex items-center gap-1 hover:underline">
+                                        View Deep Profile <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Profile Card 4 -->
+<div class="glass-panel inner-glow p-6 rounded-[32px] floating-card flex flex-col gap-6 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-6">
+<span class="px-3 py-1.5 bg-primary-container/10 text-primary font-bold text-[10px] tracking-wider uppercase rounded-full rim-light">High Potential</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-2xl overflow-hidden rim-light text-slate-300 flex items-center justify-center bg-slate-50">
+<span class="material-symbols-outlined text-4xl" data-icon="person">person</span>
+</div>
+<div>
+<h3 class="font-h3 text-xl text-on-surface">Jordan Smyth</h3>
+<p class="text-sm text-slate-500">Neural Network Specialist</p>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">AI Resonance</span>
+<span class="font-h3 text-5xl text-sky-500 ai-score-glow tracking-tighter">89.9</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-sky-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-sky-600">AI</div>
+<div class="w-8 h-8 rounded-full bg-violet-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-violet-600">Py</div>
+<div class="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">+1</div>
+</div>
+<button class="text-xs font-bold text-sky-500 flex items-center gap-1 hover:underline">
+                                        View Deep Profile <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

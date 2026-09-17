@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#6b38d4",
+                    "on-error-container": "#93000a",
+                    "secondary-container": "#8455ef",
+                    "primary-container": "#38bdf8",
+                    "primary-fixed-dim": "#7bd0ff",
+                    "inverse-surface": "#213145",
+                    "secondary-fixed": "#e9ddff",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#d3e4fe",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#5c5f61",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-primary-fixed": "#001e2c",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "on-background": "#0b1c30",
+                    "on-tertiary-container": "#414546",
+                    "surface": "#f8f9ff",
+                    "primary-fixed": "#c4e7ff",
+                    "outline": "#6e7980",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#bdc8d1",
+                    "on-secondary-fixed": "#23005c",
+                    "on-primary-container": "#004965",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-primary-fixed-variant": "#004c69",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#e0e3e5",
+                    "primary": "#00668a",
+                    "surface-container-highest": "#d3e4fe",
+                    "tertiary-container": "#afb2b4",
+                    "on-tertiary-fixed": "#191c1e",
+                    "inverse-primary": "#7bd0ff",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#fffbff",
+                    "surface-dim": "#cbdbf5",
+                    "on-error": "#ffffff",
+                    "surface-container": "#e5eeff",
+                    "on-surface-variant": "#3e484f",
+                    "background": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-tint": "#00668a",
+                    "on-surface": "#0b1c30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "unit": "8px",
+                    "margin-mobile": "16px",
+                    "container-max": "1440px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "h3": ["Space Grotesk"],
+                    "h2": ["Space Grotesk"],
+                    "h1": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "h3": ["2rem", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "h2": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "h1": ["4.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "body-md": ["1rem", {"lineHeight": "1.6", "letterSpacing": "0px", "fontWeight": "400"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.7", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background: radial-gradient(circle at 0% 0%, #f0f9ff 0%, #e0f2fe 30%, #f8f9ff 100%);
+            min-height: 100vh;
+        }
+        .aura-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(132, 85, 239, 0.1) 0%, transparent 40%);
+            filter: blur(80px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        }
+        .glass-row {
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .glass-row:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 20px 40px -20px rgba(56, 189, 248, 0.15);
+        }
+        .inner-glow {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background antialiased overflow-x-hidden">
+<div class="aura-mesh"></div>
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-6 top-6 bottom-6 w-64 rounded-[32px] border border-white/20 bg-white/10 backdrop-blur-3xl shadow-[0px_0px_50px_0px_rgba(56,189,248,0.15)] flex flex-col gap-8 p-8 h-full z-50 font-['Space_Grotesk'] tracking-tight antialiased">
+<div class="flex flex-col gap-1">
+<div class="text-2xl font-bold tracking-tighter text-sky-500">IntoreAI</div>
+<div class="text-[10px] uppercase tracking-widest text-slate-500/70">Transcendent UI</div>
+</div>
+<nav class="flex flex-col gap-2 flex-1">
+<a class="flex items-center gap-4 p-3 rounded-2xl text-slate-500/70 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 group" href="#">
+<span class="material-symbols-outlined text-sky-400 group-hover:scale-110 transition-transform">auto_awesome</span>
+<span class="text-body-md font-medium">Intelligence</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-2xl bg-sky-400/10 text-sky-500 border-l-2 border-sky-400 shadow-[0px_0px_15px_rgba(56,189,248,0.2)] active:scale-95 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">blur_on</span>
+<span class="text-body-md font-medium">Nebula</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-2xl text-slate-500/70 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">layers</span>
+<span class="text-body-md font-medium">Vault</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-2xl text-slate-500/70 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">explore</span>
+<span class="text-body-md font-medium">Transcend</span>
+</a>
+<div class="mt-auto">
+<a class="flex items-center gap-4 p-3 rounded-2xl text-slate-500/70 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="text-body-md font-medium">Settings</span>
+</a>
+</div>
+</nav>
+<button class="bg-primary text-on-primary py-4 px-6 rounded-2xl font-bold text-label-sm tracking-widest uppercase shadow-[0_10px_20px_-5px_rgba(0,102,138,0.3)] hover:scale-[1.02] active:scale-95 transition-all">
+            New Pulse
+        </button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-72 p-margin-desktop min-h-screen">
+<!-- Header Section -->
+<header class="mb-12 flex justify-between items-end">
+<div>
+<h1 class="font-h1 text-h1 text-on-background mb-2">Job Nebula</h1>
+<p class="font-body-lg text-body-lg text-tertiary max-w-xl">
+                    Manage your architectural blueprints and observe the alignment of elite intelligence matches within the recruitment void.
+                </p>
+</div>
+<div class="flex gap-4 mb-4">
+<div class="glass-card px-6 py-3 rounded-full flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></div>
+<span class="font-label-sm text-on-surface-variant">System Optimal</span>
+</div>
+</div>
+</header>
+<!-- Job List Container -->
+<div class="flex flex-col gap-gutter">
+<!-- Job Row 1 -->
+<div class="glass-row glass-card rounded-[32px] p-8 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-8">
+<div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-container to-secondary-container flex items-center justify-center text-on-primary-container shadow-lg">
+<span class="material-symbols-outlined text-3xl">architecture</span>
+</div>
+<div>
+<h3 class="font-h3 text-h3 text-on-surface mb-1">Principal Neural Architect</h3>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-400/10 text-emerald-600 text-label-sm font-bold border border-emerald-400/20">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Published
+                            </span>
+<span class="text-tertiary font-label-sm">Updated 2h ago</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-12">
+<div class="text-right">
+<div class="flex items-center gap-2 justify-end mb-1">
+<span class="material-symbols-outlined text-sky-500 text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-h3 text-xl text-sky-600">12</span>
+</div>
+<p class="text-label-sm text-slate-500 uppercase tracking-tighter">New Elite Matches</p>
+</div>
+<div class="h-12 w-[1px] bg-outline-variant/30"></div>
+<button class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-tertiary hover:bg-primary hover:text-white hover:border-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Job Row 2 -->
+<div class="glass-row glass-card rounded-[32px] p-8 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-8">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center text-outline shadow-sm">
+<span class="material-symbols-outlined text-3xl">terminal</span>
+</div>
+<div>
+<h3 class="font-h3 text-h3 text-on-surface mb-1">Lead Quantum Developer</h3>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-2 px-3 py-1 rounded-full bg-sky-400/10 text-sky-600 text-label-sm font-bold border border-sky-400/20">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                                Draft
+                            </span>
+<span class="text-tertiary font-label-sm">Modified yesterday</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-12">
+<div class="text-right opacity-40">
+<div class="flex items-center gap-2 justify-end mb-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">auto_awesome</span>
+<span class="font-h3 text-xl text-slate-500">0</span>
+</div>
+<p class="text-label-sm text-slate-400 uppercase tracking-tighter">Pending Analysis</p>
+</div>
+<div class="h-12 w-[1px] bg-outline-variant/30"></div>
+<button class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-tertiary hover:bg-primary hover:text-white hover:border-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Job Row 3 -->
+<div class="glass-row glass-card rounded-[32px] p-8 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-8">
+<div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<div>
+<h3 class="font-h3 text-h3 text-on-surface mb-1">Senior UX Transcender</h3>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-400/10 text-emerald-600 text-label-sm font-bold border border-emerald-400/20">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span>
+                                Published
+                            </span>
+<span class="text-tertiary font-label-sm">Updated 4d ago</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-12">
+<div class="text-right">
+<div class="flex items-center gap-2 justify-end mb-1">
+<span class="material-symbols-outlined text-sky-500 text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-h3 text-xl text-sky-600">42</span>
+</div>
+<p class="text-label-sm text-slate-500 uppercase tracking-tighter">New Elite Matches</p>
+</div>
+<div class="h-12 w-[1px] bg-outline-variant/30"></div>
+<button class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-tertiary hover:bg-primary hover:text-white hover:border-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Job Row 4 (Background Item) -->
+<div class="glass-row glass-card rounded-[32px] p-8 flex items-center justify-between group cursor-pointer opacity-80 scale-95 origin-top">
+<div class="flex items-center gap-8">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center text-outline shadow-sm">
+<span class="material-symbols-outlined text-3xl">hub</span>
+</div>
+<div>
+<h3 class="font-h3 text-h3 text-on-surface mb-1">Systems Synapse Lead</h3>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-2 px-3 py-1 rounded-full bg-sky-400/10 text-sky-600 text-label-sm font-bold border border-sky-400/20">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                                Draft
+                            </span>
+<span class="text-tertiary font-label-sm">Modified 1w ago</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-12">
+<div class="text-right opacity-40">
+<div class="flex items-center gap-2 justify-end mb-1">
+<span class="material-symbols-outlined text-slate-400 text-sm">auto_awesome</span>
+<span class="font-h3 text-xl text-slate-500">0</span>
+</div>
+<p class="text-label-sm text-slate-400 uppercase tracking-tighter">Archived State</p>
+</div>
+<div class="h-12 w-[1px] bg-outline-variant/30"></div>
+<button class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center text-tertiary hover:bg-primary hover:text-white hover:border-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Hub -->
+<div class="fixed bottom-12 right-12 z-50">
+<button class="group flex items-center gap-4 bg-gradient-to-r from-sky-400 to-sky-600 p-2 pr-8 rounded-full shadow-[0_20px_50px_-10px_rgba(56,189,248,0.5)] border border-white/20 hover:scale-105 active:scale-95 transition-all duration-300">
+<div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-md">
+<span class="material-symbols-outlined text-2xl">add</span>
+</div>
+<span class="text-white font-bold tracking-tight font-h3 text-lg">Draft New Blueprint</span>
+</button>
+</div>
+<!-- Visual Artifacts -->
+<div class="fixed top-[-10%] right-[-5%] w-[40%] h-[60%] bg-sky-300/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+<div class="fixed bottom-[-10%] left-[-5%] w-[30%] h-[50%] bg-violet-400/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+</body></html>

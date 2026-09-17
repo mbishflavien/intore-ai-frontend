@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recalibrating Talent DNA | LuminousTalent</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f5faff",
+                      "on-error": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#fffbff",
+                      "on-tertiary-container": "#613b00",
+                      "error": "#ba1a1a",
+                      "tertiary": "#855300",
+                      "on-secondary-fixed-variant": "#2f2ebe",
+                      "surface-container-highest": "#dee3e8",
+                      "on-surface-variant": "#3e484f",
+                      "on-primary-container": "#004965",
+                      "outline": "#6e7980",
+                      "on-primary-fixed": "#001e2c",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffddb8",
+                      "surface-container-low": "#eff4f9",
+                      "primary": "#00668a",
+                      "on-surface": "#171c20",
+                      "surface-container-high": "#e4e9ee",
+                      "inverse-primary": "#7bd0ff",
+                      "inverse-on-surface": "#edf1f6",
+                      "tertiary-fixed-dim": "#ffb960",
+                      "inverse-surface": "#2c3135",
+                      "background": "#f5faff",
+                      "secondary": "#4648d4",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#c0c1ff",
+                      "surface-dim": "#d6dbdf",
+                      "surface-container": "#eaeef3",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-container": "#38bdf8",
+                      "outline-variant": "#bdc8d1",
+                      "tertiary-container": "#f1a02b",
+                      "primary-fixed": "#c4e7ff",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-secondary-fixed": "#07006c",
+                      "surface-tint": "#00668a",
+                      "primary-fixed-dim": "#7bd0ff",
+                      "secondary-fixed": "#e1e0ff",
+                      "on-background": "#171c20",
+                      "secondary-container": "#6063ee",
+                      "surface": "#f5faff",
+                      "surface-variant": "#dee3e8",
+                      "on-primary-fixed-variant": "#004c69"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin": "32px",
+                      "xs": "8px",
+                      "sm": "16px",
+                      "xl": "64px",
+                      "gutter": "24px",
+                      "md": "24px",
+                      "unit": "4px",
+                      "lg": "40px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "display": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-sm": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .aura-bg {
+            background: radial-gradient(circle at 20% 30%, #e0f2fe 0%, #f5faff 100%),
+                        radial-gradient(circle at 80% 70%, #dbeafe 0%, transparent 50%);
+        }
+        .weight-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #38bdf8;
+            border: 4px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+        .weight-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #38bdf8;
+            border: 4px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+    </style>
+</head>
+<body class="aura-bg min-h-screen font-body-md text-on-background flex flex-col items-center justify-center p-margin">
+<div class="w-full max-w-4xl space-y-lg">
+<header class="text-center space-y-xs">
+<h1 class="font-display text-display text-primary tracking-tight">Recalibrating Talent DNA</h1>
+<p class="font-body-lg text-body-lg text-outline">Configure your professional identity for the next evolution.</p>
+</header>
+<main class="glass-panel rounded-3xl p-lg shadow-[0_8px_32px_0_rgba(99,102,241,0.05)]">
+<nav class="flex justify-center space-x-md mb-lg">
+<button class="flex items-center space-x-2 px-6 py-3 rounded-full bg-primary-container/20 text-on-primary-container font-headline-md text-body-md border border-primary-container/30">
+<span class="material-symbols-outlined text-[20px]" data-icon="fingerprint">fingerprint</span>
+<span>Bio</span>
+</button>
+<button class="flex items-center space-x-2 px-6 py-3 rounded-full text-outline font-headline-md text-body-md hover:bg-white/40 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="bolt">bolt</span>
+<span>Skills</span>
+</button>
+<button class="flex items-center space-x-2 px-6 py-3 rounded-full text-outline font-headline-md text-body-md hover:bg-white/40 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="history_edu">history_edu</span>
+<span>Experience</span>
+</button>
+</nav>
+<form class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-4 flex flex-col items-center justify-start space-y-md">
+<div class="relative group">
+<div class="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="portrait of a professional creative woman in a sunlit studio with soft focus plants and warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpwja0Ts4ARb-81g12h3GWo-ceETGbKGCv_YmA_znLaG2CMaUYSzJomee86ZCAbu4nqNNfm7nwKGFbcuxcY5uBcYaIuoNPCX-aca53DU34BXa-VdUliXl29nc27T9brwkETMpW7aLJycNLRkcb_qP4bb6g9UYTxtievxCw6XEE6p_rQEQenByHKC9KwaMFgA3yqSOIpc5gUitoD8YReLUhDVPeP-iWWP-yPwi46VLA7qOfvrwoakvaKu2qoWI5JQ9XzDO2F2OdCcFJ"/>
+</div>
+<button class="absolute bottom-2 right-2 p-2 bg-primary text-white rounded-full shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]" data-icon="photo_camera">photo_camera</span>
+</button>
+</div>
+<div class="text-center">
+<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed-variant text-label-sm font-label-sm rounded-full">Senior Architect</span>
+</div>
+</div>
+<div class="md:col-span-8 space-y-md">
+<div class="grid grid-cols-2 gap-sm">
+<div class="space-y-unit">
+<label class="font-label-sm text-label-sm text-outline ml-1">Legal Name</label>
+<input class="w-full bg-white/50 border-outline-variant rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-container outline-none transition-all font-body-md text-body-md" type="text" value="Elena Thorne"/>
+</div>
+<div class="space-y-unit">
+<label class="font-label-sm text-label-sm text-outline ml-1">Professional Handle</label>
+<input class="w-full bg-white/50 border-outline-variant rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-container outline-none transition-all font-body-md text-body-md" type="text" value="@ethorne_design"/>
+</div>
+</div>
+<div class="space-y-unit">
+<label class="font-label-sm text-label-sm text-outline ml-1">Vision Statement</label>
+<textarea class="w-full bg-white/50 border-outline-variant rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-container outline-none transition-all font-body-md text-body-md resize-none" rows="3">Architecting digital ecosystems where human intuition meets algorithmic precision. Focused on the intersection of aesthetics and high-performance engineering.</textarea>
+</div>
+<div class="space-y-sm pt-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Weight Sliders</h3>
+<div class="space-y-md p-sm bg-white/30 rounded-2xl border border-white/20">
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-sm text-label-sm text-on-surface">Product Strategy</label>
+<span class="text-primary font-bold text-label-sm">Expert</span>
+</div>
+<input class="weight-slider w-full h-2 bg-gradient-to-r from-sky-200 to-primary-container rounded-full appearance-none cursor-pointer" max="100" min="1" type="range" value="85"/>
+<div class="flex justify-between text-[10px] text-outline uppercase tracking-widest font-bold">
+<span>Junior</span>
+<span>Mid</span>
+<span>Expert</span>
+</div>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-sm text-label-sm text-on-surface">System Architecture</label>
+<span class="text-primary font-bold text-label-sm">Advanced</span>
+</div>
+<input class="weight-slider w-full h-2 bg-gradient-to-r from-sky-200 to-primary-container rounded-full appearance-none cursor-pointer" max="100" min="1" type="range" value="72"/>
+<div class="flex justify-between text-[10px] text-outline uppercase tracking-widest font-bold">
+<span>Junior</span>
+<span>Mid</span>
+<span>Expert</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+<footer class="mt-lg pt-lg border-t border-white/30 flex justify-end space-x-md">
+<button class="px-8 py-3 rounded-full text-primary font-bold hover:bg-white/40 transition-all active:scale-95 border border-primary/20">
+                    Discard Changes
+                </button>
+<button class="px-10 py-3 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-white font-bold shadow-lg shadow-sky-200/50 hover:brightness-105 active:scale-95 transition-all">
+                    Commit DNA Update
+                </button>
+</footer>
+</main>
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="glass-panel p-md rounded-2xl flex items-start space-x-sm">
+<div class="p-2 bg-sky-100 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="security">security</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[16px] text-on-surface">Neural Privacy</h4>
+<p class="text-label-sm text-outline">Your talent data is encrypted and only visible to matching nodes.</p>
+</div>
+</div>
+<div class="glass-panel p-md rounded-2xl flex items-start space-x-sm">
+<div class="p-2 bg-sky-100 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="sync">sync</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[16px] text-on-surface">Auto-Sync</h4>
+<p class="text-label-sm text-outline">Pulling latest contributions from GitHub and Behance repos.</p>
+</div>
+</div>
+<div class="glass-panel p-md rounded-2xl flex items-start space-x-sm">
+<div class="p-2 bg-sky-100 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="query_stats">query_stats</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[16px] text-on-surface">Visibility Score</h4>
+<p class="text-label-sm text-outline">Your profile is trending in the 'Design Engineering' sector.</p>
+</div>
+</div>
+</section>
+</div>
+</body></html>

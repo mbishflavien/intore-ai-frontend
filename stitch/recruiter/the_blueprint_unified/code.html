@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-rim {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+        }
+        .aura-mesh {
+            background: radial-gradient(at 0% 0%, #38bdf8 0%, transparent 50%),
+                        radial-gradient(at 100% 0%, #8455ef 0%, transparent 50%),
+                        radial-gradient(at 100% 100%, #38bdf8 0%, transparent 50%),
+                        radial-gradient(at 0% 100%, #8455ef 0%, transparent 50%);
+            background-size: 200% 200%;
+        }
+        .floating-drift {
+            animation: drift 6s ease-in-out infinite;
+        }
+        @keyframes drift {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border: 2px solid #38bdf8;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eff4ff",
+                        "on-primary-fixed": "#001e2c",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-surface": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#414546",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#c4e7ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-tint": "#00668a",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#5c5f61",
+                        "on-secondary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed": "#23005c",
+                        "secondary-fixed": "#e9ddff",
+                        "secondary": "#6b38d4",
+                        "surface-container": "#e5eeff",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#8455ef",
+                        "on-primary-container": "#004965",
+                        "outline-variant": "#bdc8d1",
+                        "on-surface-variant": "#3e484f",
+                        "inverse-surface": "#213145",
+                        "primary": "#00668a",
+                        "on-primary-fixed-variant": "#004c69",
+                        "tertiary-container": "#afb2b4",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "inverse-primary": "#7bd0ff",
+                        "on-error": "#ffffff",
+                        "outline": "#6e7980",
+                        "primary-container": "#38bdf8"
+                    },
+                    "fontFamily": {
+                        "h2": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "h3": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Space Grotesk"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "h1": ["4.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "h3": ["2rem", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                        "body-md": ["1rem", {"lineHeight": "1.6", "letterSpacing": "0px", "fontWeight": "400"}],
+                        "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-lg": ["1.125rem", {"lineHeight": "1.7", "letterSpacing": "0.01em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen font-body-md text-on-background overflow-x-hidden">
+<!-- Atmospheric Background -->
+<div class="fixed inset-0 aura-mesh opacity-20 pointer-events-none z-0"></div>
+<div class="fixed inset-0 backdrop-blur-3xl z-0"></div>
+<!-- SideNavBar from COMPONENTS_13 -->
+<nav class="fixed left-6 top-6 bottom-6 w-64 rounded-[32px] border border-white/20 bg-white/10 dark:bg-black/20 backdrop-blur-3xl flex flex-col gap-8 p-8 h-full z-50 shadow-[0px_0px_50px_0px_rgba(56,189,248,0.15)] font-['Space_Grotesk'] tracking-tight antialiased">
+<div class="flex flex-col">
+<div class="text-2xl font-bold tracking-tighter text-sky-500 dark:text-sky-400">IntoreAI</div>
+<div class="text-[10px] uppercase tracking-widest text-slate-400 mt-1">Transcendent UI</div>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span>Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-sky-400/10 text-sky-500 dark:text-sky-300 border-l-2 border-sky-400 shadow-[0px_0px_15px_rgba(56,189,248,0.2)] active:scale-95 transform transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">blur_on</span>
+<span>Nebula</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span>Vault</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span>Transcend</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<div class="pt-4 border-t border-white/10">
+<button class="w-full py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(56,189,248,0.3)] hover:scale-105 transition-transform active:scale-95">New Pulse</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pl-80 pt-12 pr-12 pb-12 relative z-10">
+<div class="max-w-7xl mx-auto">
+<!-- Unified Glass Container -->
+<div class="bg-white/30 dark:bg-black/10 backdrop-blur-3xl rounded-[48px] border border-white/30 glass-rim p-10 shadow-2xl">
+<!-- Section Header inside the glass -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="font-h1 text-h2 text-on-surface mb-2">Genetic Blueprinting</h2>
+<p class="font-body-lg text-body-lg text-outline">Define the core DNA of your next high-impact hire.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2 rounded-full border border-sky-200 bg-white/40 backdrop-blur-lg text-sky-600 font-bold hover:bg-sky-50 transition-colors">Save Draft</button>
+<button class="px-8 py-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-bold shadow-lg hover:scale-105 active:scale-95 transition-all">Launch Nebula</button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: DNA Hub (Central Focal Point) -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- DNA Workspace Card -->
+<div class="relative bg-white/60 backdrop-blur-2xl rounded-3xl p-8 border border-white/40 shadow-xl floating-drift">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-h3 text-h3 flex items-center gap-3">
+<span class="material-symbols-outlined text-sky-500">genetics</span>
+                                Skill Mapping DNA
+                            </h3>
+<span class="px-4 py-1 rounded-full bg-sky-500/10 text-sky-600 text-xs font-bold uppercase tracking-widest border border-sky-200">Active Extraction</span>
+</div>
+<!-- Skill Orbs Area -->
+<div class="relative h-72 bg-slate-900/5 rounded-2xl border border-dashed border-sky-300/50 flex flex-wrap gap-4 p-8 items-center justify-center overflow-hidden">
+<div class="px-6 py-3 rounded-full bg-gradient-to-br from-sky-400/80 to-sky-600/80 text-white font-medium shadow-lg backdrop-blur-md flex items-center gap-2 hover:scale-110 transition-transform cursor-move">
+<span class="material-symbols-outlined text-sm">auto_awesome</span> Neural Networks
+                            </div>
+<div class="px-6 py-3 rounded-full bg-gradient-to-br from-indigo-400/80 to-indigo-600/80 text-white font-medium shadow-lg backdrop-blur-md flex items-center gap-2 hover:scale-110 transition-transform cursor-move">
+<span class="material-symbols-outlined text-sm">code</span> React Architecture
+                            </div>
+<div class="px-6 py-3 rounded-full bg-gradient-to-br from-violet-400/80 to-violet-600/80 text-white font-medium shadow-lg backdrop-blur-md flex items-center gap-2 hover:scale-110 transition-transform cursor-move">
+<span class="material-symbols-outlined text-sm">database</span> Vector DBs
+                            </div>
+<div class="px-6 py-3 rounded-full bg-gradient-to-br from-cyan-400/80 to-cyan-600/80 text-white font-medium shadow-lg backdrop-blur-md flex items-center gap-2 hover:scale-110 transition-transform cursor-move">
+<span class="material-symbols-outlined text-sm">cloud</span> AWS Lambda
+                            </div>
+<!-- Central Hub Glow -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-64 h-64 bg-sky-400/15 rounded-full blur-3xl"></div>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-outline uppercase">Input Vector</label>
+<div class="relative">
+<input class="w-full bg-white/40 border-b-2 border-sky-300 focus:border-sky-500 focus:ring-0 transition-all py-3 px-4 rounded-t-lg font-body-md placeholder:text-slate-400" placeholder="Paste job description or type skill..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-sky-400">bolt</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-outline uppercase">AI Refinement</label>
+<div class="flex items-center gap-4 p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
+<span class="material-symbols-outlined text-indigo-500" style="font-variation-settings: 'FILL' 1;">neurology</span>
+<p class="text-xs text-indigo-700 italic">"IntoreAI is identifying adjacent skills: PyTorch, LLMOps..."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Red-Zone Dealbreaker Area -->
+<div class="bg-gradient-to-br from-red-50/60 to-white/60 backdrop-blur-xl rounded-3xl p-8 border border-red-100 shadow-lg relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-red-100/50 blur-3xl -z-1"></div>
+<h3 class="font-h3 text-h3 flex items-center gap-3 text-red-700 mb-6 text-2xl">
+<span class="material-symbols-outlined text-red-500">warning</span>
+                            The Red-Zone
+                        </h3>
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-2 px-4 py-2 bg-red-100 border border-red-200 text-red-700 rounded-full text-sm font-medium">
+<span class="material-symbols-outlined text-sm">block</span> No Remote Experience
+                                <span class="material-symbols-outlined text-xs cursor-pointer">close</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 bg-red-100 border border-red-200 text-red-700 rounded-full text-sm font-medium">
+<span class="material-symbols-outlined text-sm">block</span> Relocation Required
+                                <span class="material-symbols-outlined text-xs cursor-pointer">close</span>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 border-2 border-dashed border-red-300 text-red-400 rounded-full text-sm font-medium hover:bg-red-50 transition-colors">
+<span class="material-symbols-outlined text-sm">add</span> Define Dealbreaker
+                            </button>
+</div>
+</div>
+</div>
+<!-- Right Column: Weights & Sliders -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Weighing Card -->
+<div class="bg-white/70 backdrop-blur-2xl rounded-3xl p-8 border border-white/60 shadow-xl flex flex-col gap-8">
+<div class="flex items-center justify-between">
+<h4 class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Influence Matrix</h4>
+<span class="material-symbols-outlined text-sky-500">balance</span>
+</div>
+<!-- Frosted Slider 1 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<span class="font-body-md font-semibold text-slate-700">Practical Skills</span>
+<span class="text-sky-500 font-bold">85%</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-500" type="range"/>
+<div class="flex justify-between text-[10px] text-slate-400 uppercase tracking-tighter">
+<span>Low Priority</span>
+<span>Critical Mastery</span>
+</div>
+</div>
+<!-- Frosted Slider 2 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<span class="font-body-md font-semibold text-slate-700">Industry Experience</span>
+<span class="text-indigo-500 font-bold">40%</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-500" type="range"/>
+<div class="flex justify-between text-[10px] text-slate-400 uppercase tracking-tighter">
+<span>Junior / Adaptable</span>
+<span>Senior Veteran</span>
+</div>
+</div>
+<!-- Frosted Slider 3 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<span class="font-body-md font-semibold text-slate-700">Cultural Resonance</span>
+<span class="text-violet-500 font-bold">62%</span>
+</div>
+<input class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-violet-500" type="range"/>
+<div class="flex justify-between text-[10px] text-slate-400 uppercase tracking-tighter">
+<span>Independent</span>
+<span>Culture Lead</span>
+</div>
+</div>
+<!-- Aura Dynamic Card -->
+<div class="mt-4 p-6 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<div class="text-xs font-bold uppercase opacity-80 mb-1">Current Job Archetype</div>
+<div class="text-xl font-bold">The Technical Architect</div>
+<p class="text-xs mt-3 opacity-90 leading-relaxed">Focusing heavily on specific tech stacks while maintaining a moderate level of senior domain leadership.</p>
+</div>
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/20 rounded-full blur-2xl"></div>
+</div>
+</div>
+<!-- Studio Summary -->
+<div class="bg-white/50 backdrop-blur-xl rounded-3xl p-8 border border-white/40 shadow-sm">
+<h4 class="font-label-sm text-label-sm uppercase tracking-widest text-outline mb-6">Studio Checklist</h4>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium text-slate-700">DNA Sequence Loaded</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium text-slate-700">Market Parity Calculated</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-300">radio_button_unchecked</span>
+<span class="text-sm font-medium text-slate-400">Target Pool Size Optimization</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Unified Bottom Action -->
+<div class="mt-12 flex justify-center border-t border-white/20 pt-8">
+<button class="px-12 py-4 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-500 to-violet-600 text-white font-black text-lg shadow-[0_0_30px_rgba(56,189,248,0.4)] hover:scale-105 active:scale-95 transition-all flex items-center gap-4">
+<span class="material-symbols-outlined">rocket_launch</span>
+                    GENERATE NEBULA SEARCH
+                </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation Trigger -->
+<div class="lg:hidden fixed bottom-8 right-8 z-50">
+<div class="w-14 h-14 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 shadow-xl flex items-center justify-center text-white cursor-pointer active:scale-90 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</div>
+</div>
+</body></html>

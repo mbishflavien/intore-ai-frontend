@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DNA Validation Room | ProofHire</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "surface-bright": "#f5faff",
+                  "on-error": "#ffffff",
+                  "on-secondary": "#ffffff",
+                  "on-secondary-container": "#fffbff",
+                  "on-tertiary-container": "#613b00",
+                  "error": "#ba1a1a",
+                  "tertiary": "#855300",
+                  "on-secondary-fixed-variant": "#2f2ebe",
+                  "surface-container-highest": "#dee3e8",
+                  "on-surface-variant": "#3e484f",
+                  "on-primary-container": "#004965",
+                  "outline": "#6e7980",
+                  "on-primary-fixed": "#001e2c",
+                  "on-error-container": "#93000a",
+                  "tertiary-fixed": "#ffddb8",
+                  "surface-container-low": "#eff4f9",
+                  "primary": "#00668a",
+                  "on-surface": "#171c20",
+                  "surface-container-high": "#e4e9ee",
+                  "inverse-primary": "#7bd0ff",
+                  "inverse-on-surface": "#edf1f6",
+                  "tertiary-fixed-dim": "#ffb960",
+                  "inverse-surface": "#2c3135",
+                  "background": "#f5faff",
+                  "secondary": "#4648d4",
+                  "error-container": "#ffdad6",
+                  "on-tertiary-fixed-variant": "#653e00",
+                  "on-tertiary": "#ffffff",
+                  "on-primary": "#ffffff",
+                  "secondary-fixed-dim": "#c0c1ff",
+                  "surface-dim": "#d6dbdf",
+                  "surface-container": "#eaeef3",
+                  "surface-container-lowest": "#ffffff",
+                  "primary-container": "#38bdf8",
+                  "outline-variant": "#bdc8d1",
+                  "tertiary-container": "#f1a02b",
+                  "primary-fixed": "#c4e7ff",
+                  "on-tertiary-fixed": "#2a1700",
+                  "on-secondary-fixed": "#07006c",
+                  "surface-tint": "#00668a",
+                  "primary-fixed-dim": "#7bd0ff",
+                  "secondary-fixed": "#e1e0ff",
+                  "on-background": "#171c20",
+                  "secondary-container": "#6063ee",
+                  "surface": "#f5faff",
+                  "surface-variant": "#dee3e8",
+                  "on-primary-fixed-variant": "#004c69"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "margin": "32px",
+                  "xs": "8px",
+                  "sm": "16px",
+                  "xl": "64px",
+                  "gutter": "24px",
+                  "md": "24px",
+                  "unit": "4px",
+                  "lg": "40px"
+          },
+          "fontFamily": {
+                  "body-md": ["Inter"],
+                  "label-sm": ["Inter"],
+                  "headline-md": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "headline-lg": ["Inter"],
+                  "display": ["Inter"]
+          },
+          "fontSize": {
+                  "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "label-sm": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                  "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                  "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                  "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .glass-surface {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .aura-mesh {
+      background: radial-gradient(circle at 50% 50%, #e0f2fe 0%, #f5faff 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .aura-mesh::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+      z-index: 0;
+    }
+    .laser-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+      box-shadow: 0 0 15px #38bdf8;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body class="aura-mesh font-body-md text-on-surface min-h-screen flex flex-col items-center justify-center p-margin">
+<!-- Header / Progress Area -->
+<header class="w-full max-w-6xl mb-md flex flex-col items-center z-10">
+<div class="flex items-center justify-between w-full mb-sm">
+<div class="flex items-center gap-xs">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]">biotech</span>
+</div>
+<h1 class="font-headline-md text-headline-md tracking-tight text-slate-800">DNA Validation Room</h1>
+</div>
+<div class="flex items-center gap-md">
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-slate-500 uppercase tracking-widest">Environment Status</p>
+<p class="font-headline-md text-headline-md text-sky-600">Active</p>
+</div>
+</div>
+</div>
+<!-- Oxygen Gauge / Timer -->
+<div class="w-full glass-surface rounded-xl p-sm shadow-[0_8px_32px_0_rgba(99,102,241,0.05)]">
+<div class="flex justify-between items-end mb-xs">
+<span class="font-label-sm text-label-sm text-slate-600 flex items-center gap-unit">
+<span class="material-symbols-outlined text-[16px]">air</span> Oxygen Supply
+        </span>
+<span class="font-headline-md text-headline-md text-primary tracking-tighter">42:15</span>
+</div>
+<div class="w-full h-3 bg-slate-200/50 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 w-[78%] rounded-full shadow-[0_0_12px_rgba(56,189,248,0.4)]"></div>
+</div>
+<div class="flex justify-between mt-unit">
+<span class="text-[10px] font-bold text-sky-500 uppercase tracking-tighter">78% O₂ Remaining</span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Emergency Extraction in 42m</span>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="w-full max-w-6xl flex-1 relative z-10 flex flex-col gap-md">
+<!-- Bento Editor Layout -->
+<div class="grid grid-cols-12 gap-gutter flex-1">
+<!-- Challenge Instructions -->
+<div class="col-span-12 lg:col-span-3 glass-surface rounded-xl p-md flex flex-col gap-sm">
+<h3 class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-widest">Protocol 042-B</h3>
+<h2 class="font-headline-md text-headline-md leading-tight text-slate-800">Sequence Alignment</h2>
+<div class="h-px bg-white/40 w-full"></div>
+<p class="text-body-md font-body-md text-on-surface-variant">
+          Identify the mutation patterns in the provided DNA cluster. Implement an algorithm that detects non-conforming base pairs within a <span class="bg-sky-100 text-sky-700 px-1 rounded">2ms window</span>.
+        </p>
+<div class="mt-auto space-y-xs">
+<div class="flex items-center gap-sm text-label-sm text-slate-600">
+<span class="material-symbols-outlined text-sky-500">memory</span>
+<span>Limit: 256MB RAM</span>
+</div>
+<div class="flex items-center gap-sm text-label-sm text-slate-600">
+<span class="material-symbols-outlined text-sky-500">timer</span>
+<span>Complexity: O(n log n)</span>
+</div>
+</div>
+</div>
+<!-- High-Tech Code Editor -->
+<div class="col-span-12 lg:col-span-9 relative group">
+<div class="glass-surface rounded-xl overflow-hidden shadow-2xl h-[600px] flex flex-col border border-white/50">
+<!-- Editor Toolbar -->
+<div class="h-12 bg-white/40 border-b border-white/30 flex items-center px-md justify-between">
+<div class="flex items-center gap-md">
+<div class="flex gap-1.5">
+<div class="w-3 h-3 rounded-full bg-red-400/60"></div>
+<div class="w-3 h-3 rounded-full bg-amber-400/60"></div>
+<div class="w-3 h-3 rounded-full bg-emerald-400/60"></div>
+</div>
+<div class="h-4 w-px bg-slate-300 mx-2"></div>
+<span class="text-label-sm font-label-sm text-slate-600 italic">dna_validator.rs</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="text-[11px] font-bold text-sky-600 bg-sky-50 px-2 py-0.5 rounded border border-sky-100 uppercase">Rust v1.75</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">settings</span>
+</div>
+</div>
+<!-- Code Canvas -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Line Numbers -->
+<div class="w-12 bg-slate-50/30 border-r border-white/20 flex flex-col items-center pt-md font-mono text-[13px] text-slate-400 leading-[1.6]">
+<span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span>
+</div>
+<!-- Text Content -->
+<div class="flex-1 p-md font-mono text-[14px] leading-[1.6] text-slate-700 overflow-y-auto">
+<p><span class="text-indigo-500">use</span> std::collections::HashMap;</p>
+<p><span class="text-indigo-500">use</span> proofhire_core::dna::Validation;</p>
+<p> </p>
+<p><span class="text-sky-600">fn</span> <span class="text-amber-600">validate_sequence</span>(chain: <span class="text-sky-600">&amp;str</span>) -&gt; <span class="text-sky-600">Result</span>&lt;(), MutationError&gt; {</p>
+<p class="pl-md"><span class="text-slate-400">// TODO: Implement the validation protocol</span></p>
+<p class="pl-md"><span class="text-indigo-500">let</span> <span class="text-sky-600">mut</span> frequency = HashMap::<span class="text-sky-600">new</span>();</p>
+<p class="pl-md"> </p>
+<p class="pl-md"><span class="text-indigo-500">for</span> base <span class="text-indigo-500">in</span> chain.chars() {</p>
+<p class="pl-lg"><span class="text-indigo-500">let</span> count = frequency.entry(base).or_insert(<span class="text-emerald-600">0</span>);</p>
+<p class="pl-lg">*count += <span class="text-emerald-600">1</span>;</p>
+<p class="pl-md">}</p>
+<p class="pl-md"> </p>
+<p class="pl-md"><span class="text-slate-400">// Logic for anomaly detection</span></p>
+<p class="pl-md"><span class="text-sky-600">Ok</span>(())</p>
+<p>}</p>
+</div>
+</div>
+<!-- Laser Scan Element (Decorative) -->
+<div class="laser-line top-1/2 opacity-20"></div>
+<!-- Bottom Status Bar -->
+<div class="h-8 bg-sky-500/10 border-t border-white/30 flex items-center px-md text-[11px] font-medium text-sky-700 gap-md">
+<span class="flex items-center gap-unit"><span class="material-symbols-outlined text-[14px]">sync</span> Connection: Stable</span>
+<span class="flex items-center gap-unit"><span class="material-symbols-outlined text-[14px]">terminal</span> Compiler: Ready</span>
+<span class="ml-auto">Ln 14, Col 21</span>
+<span>UTF-8</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Execution Area -->
+<div class="flex justify-center mt-md">
+<button class="relative group px-12 py-4 rounded-full overflow-hidden transition-all active:scale-95">
+<!-- Glow Layer -->
+<div class="absolute inset-0 bg-gradient-to-r from-sky-400 to-indigo-500 group-hover:brightness-110 transition-all"></div>
+<!-- Internal Light Stroke -->
+<div class="absolute inset-0 border border-white/30 rounded-full"></div>
+<!-- Laser Scan Animation Simulation -->
+<div class="absolute top-0 left-0 w-full h-full bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out skew-x-12"></div>
+<div class="relative flex items-center gap-sm">
+<span class="material-symbols-outlined text-white" data-weight="fill">rocket_launch</span>
+<span class="text-white font-bold text-body-md tracking-wider">EXECUTE SUBMISSION</span>
+</div>
+</button>
+</div>
+</main>
+<!-- Ambient Footer Details -->
+<footer class="mt-xl w-full max-w-6xl flex justify-between items-center opacity-50 z-10">
+<div class="flex gap-md">
+<div class="flex items-center gap-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+<span class="text-[12px] font-medium text-slate-500 uppercase tracking-widest">Network Secured</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+<span class="text-[12px] font-medium text-slate-500 uppercase tracking-widest">Terminal ID: L-TALENT-4209</span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[12px] font-medium text-slate-400 uppercase tracking-widest">Powered by ProofHire Quantum Core</span>
+</div>
+</footer>
+<!-- Background Decorative Elements -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<!-- Floating Orbs -->
+<div class="absolute top-1/4 left-10 w-96 h-96 bg-sky-300/10 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-1/4 right-10 w-[500px] h-[500px] bg-indigo-300/10 rounded-full blur-[150px]"></div>
+<!-- Abstract Tech Circles -->
+<div class="absolute -top-20 -right-20 w-80 h-80 border border-sky-400/10 rounded-full"></div>
+<div class="absolute -top-10 -right-10 w-80 h-80 border border-sky-300/10 rounded-full"></div>
+</div>
+</body></html>

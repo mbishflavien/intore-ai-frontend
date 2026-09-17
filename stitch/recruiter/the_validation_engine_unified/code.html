@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IntoreAI | Luminous Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eff4ff",
+                        "on-primary-fixed": "#001e2c",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-surface": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#414546",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#c4e7ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-tint": "#00668a",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#5c5f61",
+                        "on-secondary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed": "#23005c",
+                        "secondary-fixed": "#e9ddff",
+                        "secondary": "#6b38d4",
+                        "surface-container": "#e5eeff",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#8455ef",
+                        "on-primary-container": "#004965",
+                        "outline-variant": "#bdc8d1",
+                        "on-surface-variant": "#3e484f",
+                        "inverse-surface": "#213145",
+                        "primary": "#00668a",
+                        "on-primary-fixed-variant": "#004c69",
+                        "tertiary-container": "#afb2b4",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "inverse-primary": "#7bd0ff",
+                        "on-error": "#ffffff",
+                        "outline": "#6e7980",
+                        "primary-container": "#38bdf8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "h3": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Space Grotesk"],
+                        "body-lg": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .aura-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, rgba(132, 85, 239, 0.05) 50%, transparent 100%);
+        }
+        .glass-rim {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+        }
+        .nebula-blur {
+            filter: blur(12px);
+            opacity: 0.6;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen aura-bg overflow-x-hidden flex">
+<!-- SideNavBar from {{DATA:COMPONENTS:COMPONENTS_13}} -->
+<aside class="fixed left-6 top-6 bottom-6 w-64 rounded-[32px] border border-white/20 bg-white/10 dark:bg-black/20 backdrop-blur-3xl shadow-[0px_0px_50px_0px_rgba(56,189,248,0.15)] flex flex-col gap-8 p-8 h-full z-50 font-['Space_Grotesk'] tracking-tight antialiased">
+<div class="flex flex-col gap-2">
+<div class="text-2xl font-bold tracking-tighter text-sky-500 dark:text-sky-400">IntoreAI</div>
+<div class="text-[10px] text-slate-500/70 dark:text-slate-400/50 uppercase tracking-widest font-bold">Transcendent UI</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-500 ease-out text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl active:scale-95 group" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-medium">Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-500 ease-out bg-sky-400/10 text-sky-500 dark:text-sky-300 border-l-2 border-sky-400 shadow-[0px_0px_15px_rgba(56,189,248,0.2)] group" href="#">
+<span class="material-symbols-outlined" data-icon="blur_on">blur_on</span>
+<span class="font-bold">Nebula</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-500 ease-out text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl active:scale-95 group" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="font-medium">Vault</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-500 ease-out text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl active:scale-95 group" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-medium">Transcend</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-500 ease-out text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl active:scale-95 group" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 flex flex-col gap-6">
+<div class="flex items-center gap-3 px-2">
+<img alt="IntoreAI Brand Icon" class="w-10 h-10 rounded-full border border-sky-400/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9QIJ-zu3fQnlq-OclJr5f3RrSL1H-z9D6_Mr8NSzIl7atAqCohH-JVK8NypfkEzZ56AW91GBYFj-v8o8crEq2S65MFEGD_0S6jKPCxcLLaReXayJvC09J_iUW2V3UcE1Q2UkZhoh97A25XppmAYvqAeUlo06jVI2zv12o_Xo72gFme6FlFHmUzJYA8kgTNoUiBRCRMi-fsb0Ih6U8l8pbYBUNVCGZHmlK-BuBpOpk08f9BFSqbIN6r4oBxAFtUcrKzeiUcbOavVc"/>
+<div>
+<div class="text-sm font-bold">Alex Chen</div>
+<div class="text-[10px] text-sky-500 font-bold uppercase">Senior Partner</div>
+</div>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-[20px] font-bold text-sm shadow-lg shadow-sky-500/20 active:scale-95 transition-transform duration-200">
+            New Pulse
+        </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 ml-80 mr-12 pt-12 pb-12">
+<div class="max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="mb-10 flex justify-between items-end">
+<div>
+<h1 class="font-h1 text-4xl font-bold text-on-surface mb-2">Validation Engine</h1>
+<p class="font-body-lg text-slate-500">Live screening: 1,204 nodes analyzed. 14 matches ready for verification.</p>
+</div>
+<div class="flex gap-4">
+<div class="relative group">
+<input class="bg-white/20 border border-white/30 backdrop-blur-xl rounded-full py-2 px-6 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-sky-400/50 text-on-surface" placeholder="Search Nebula..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-2 text-slate-400 text-lg" data-icon="search">search</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8 items-start">
+<!-- Ranking Pillar (Profile Tiles) -->
+<div class="col-span-8 space-y-6">
+<!-- Profile Tile 1 -->
+<div class="relative group bg-white/10 backdrop-blur-2xl rounded-[32px] p-8 glass-rim border border-white/30 hover:border-sky-400/50 transition-all duration-500 shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
+<div class="flex items-start justify-between">
+<div class="flex gap-8">
+<div class="relative">
+<img alt="Jordan Drae Profile" class="w-28 h-28 rounded-3xl object-cover border-2 border-white shadow-2xl" data-alt="professional portrait of a creative director in a minimalist studio setting with soft cyan ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHuTSM4eSvSS1BZBnuLRF9KjLpAjkmDnOFmkjidqdXtYXSIzWH7vk6TKaLaMaXPfjidB0xNjJ68_3Z8G5Vf8Dim7zpa4RwcItuzXh3Ei1VvNMlnhzRQBSw9g-SwFZx2_nOfXJltrx6Dql4fV4b1JMGjn3LcVEsfADoBWz5EfwTynxxdIUrFERSsDihO62MWLnOvYS1uc9MdcpP73Ej4u9FM60q8ijmUg41-aIrY-6NPzr2WO4EOCzEnGr5KzSFQVP_p0NbP9T771A"/>
+<div class="absolute -bottom-2 -right-2 bg-sky-500 text-white rounded-full p-1.5 border-4 border-white">
+<span class="material-symbols-outlined text-sm block" data-icon="verified" data-weight="fill">verified</span>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-4 mb-2">
+<h2 class="font-h3 text-2xl font-bold text-on-surface">Jordan Drae</h2>
+<span class="px-4 py-1 bg-sky-100/50 text-sky-600 rounded-full text-[10px] font-bold uppercase tracking-widest backdrop-blur">Top 0.1%</span>
+</div>
+<p class="text-slate-500 font-medium mb-6 text-lg">Principal Systems Architect • MetaVanguard</p>
+<div class="flex gap-3">
+<span class="px-4 py-1.5 bg-white/40 backdrop-blur-md rounded-xl text-xs font-semibold glass-rim">Distributed Systems</span>
+<span class="px-4 py-1.5 bg-white/40 backdrop-blur-md rounded-xl text-xs font-semibold glass-rim">Rust</span>
+<span class="px-4 py-1.5 bg-white/40 backdrop-blur-md rounded-xl text-xs font-semibold glass-rim">Web3 Infrastructure</span>
+</div>
+</div>
+</div>
+<!-- Match Nebula Score -->
+<div class="relative w-36 h-36 flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-indigo-500 nebula-blur rounded-full opacity-40"></div>
+<div class="relative z-10 text-center">
+<div class="text-4xl font-black text-indigo-900 leading-none">98.4</div>
+<div class="text-[10px] font-bold uppercase text-indigo-800/60 mt-1">Nebula Score</div>
+</div>
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" opacity="0.2" r="45" stroke="white" stroke-width="2"></circle>
+<circle class="text-sky-500" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-dasharray="282.7" stroke-dashoffset="10" stroke-width="3"></circle>
+</svg>
+</div>
+</div>
+<div class="mt-10 grid grid-cols-3 gap-6">
+<div class="p-5 bg-white/20 rounded-2xl glass-rim">
+<div class="text-[11px] uppercase font-bold text-slate-400 mb-2">Education DNA</div>
+<div class="text-base font-semibold text-on-surface">PhD, Stanford CS</div>
+<div class="w-full h-1.5 bg-slate-200/50 rounded-full mt-3 overflow-hidden">
+<div class="h-full bg-sky-400 w-[95%]"></div>
+</div>
+</div>
+<div class="p-5 bg-white/20 rounded-2xl glass-rim">
+<div class="text-[11px] uppercase font-bold text-slate-400 mb-2">Skills Frequency</div>
+<div class="text-base font-semibold text-on-surface">12+ Core Stacks</div>
+<div class="w-full h-1.5 bg-slate-200/50 rounded-full mt-3 overflow-hidden">
+<div class="h-full bg-indigo-400 w-[92%]"></div>
+</div>
+</div>
+<div class="p-5 bg-white/20 rounded-2xl glass-rim">
+<div class="text-[11px] uppercase font-bold text-slate-400 mb-2">Experience Depth</div>
+<div class="text-base font-semibold text-on-surface">14 Years High-Load</div>
+<div class="w-full h-1.5 bg-slate-200/50 rounded-full mt-3 overflow-hidden">
+<div class="h-full bg-violet-400 w-[88%]"></div>
+</div>
+</div>
+</div>
+<!-- Floating Glass Action Pills -->
+<div class="mt-10 flex justify-center gap-4">
+<button class="px-8 py-3 bg-white/30 backdrop-blur-xl border border-red-200/50 text-red-500 rounded-full text-sm font-bold hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-95">Reject</button>
+<button class="px-8 py-3 bg-white/30 backdrop-blur-xl border border-slate-200/50 text-slate-600 rounded-full text-sm font-bold hover:bg-slate-200 transition-all shadow-sm active:scale-95">Hold</button>
+<button class="px-12 py-3 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-full text-sm font-bold shadow-lg shadow-sky-500/30 hover:scale-105 transition-transform active:scale-95">Advance Candidate</button>
+</div>
+</div>
+<!-- Profile Tile 2 (Secondary Match) -->
+<div class="relative group bg-white/5 backdrop-blur-xl rounded-[32px] p-8 glass-rim border border-white/20 opacity-80 hover:opacity-100 transition-all duration-500 shadow-[0_10px_40px_rgba(0,0,0,0.02)]">
+<div class="flex items-start justify-between">
+<div class="flex gap-8">
+<div class="relative">
+<img alt="Sarah Miller Profile" class="w-24 h-24 rounded-3xl object-cover border-2 border-white/50" data-alt="close up headshot of a female technology executive with bright intelligent eyes and a confident smile against a soft focus office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8YqDJBtnvm4ku7v3GGLdPNAAyPiaiTlfEtvoiRIBmfLyJg9BDyaZOotaVX2DXnFOSJLyLQ0csvJOjkGlQOCc14F9i50SnZ0teacVNW-bARFKWryW-h5mu5_bf3F6-LbKJsoh5tGihFQ36g8s_JK9-iJtyabbd2de4X2juEwVyg40OcLynxdIKricffQgkxnzeu-zemA_9hn-OSBggHvsqh-NWzusA0QKFCUu1bxLvi7tW5x2YHQGo-jpaS5Zv8PR41PcX6SZgud8"/>
+<div class="absolute -bottom-2 -right-2 bg-indigo-500 text-white rounded-full p-1 border-4 border-white">
+<span class="material-symbols-outlined text-xs block" data-icon="shield" data-weight="fill">shield</span>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-4 mb-1">
+<h2 class="font-h3 text-xl font-bold text-on-surface">Sarah Miller</h2>
+<span class="px-3 py-0.5 bg-indigo-100/50 text-indigo-600 rounded-full text-[9px] font-bold uppercase tracking-widest backdrop-blur">Verified Expert</span>
+</div>
+<p class="text-slate-500 font-medium mb-4">Senior UX Engineer • NeuraLink</p>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-white/20 backdrop-blur rounded-lg text-[11px] font-semibold glass-rim">Interface Design</span>
+<span class="px-3 py-1 bg-white/20 backdrop-blur rounded-lg text-[11px] font-semibold glass-rim">React</span>
+<span class="px-3 py-1 bg-white/20 backdrop-blur rounded-lg text-[11px] font-semibold glass-rim">WebGL</span>
+</div>
+</div>
+</div>
+<div class="relative w-28 h-28 flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-tr from-violet-400 to-fuchsia-500 nebula-blur rounded-full opacity-30"></div>
+<div class="relative z-10 text-center">
+<div class="text-2xl font-black text-indigo-900 leading-none">92.1</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Stream Side Panel -->
+<div class="col-span-4 sticky top-12 space-y-8">
+<!-- Data Stream Log -->
+<div class="bg-white/10 backdrop-blur-3xl rounded-[32px] p-8 glass-rim border border-white/30 overflow-hidden shadow-2xl">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-['Space_Grotesk'] font-bold text-xl tracking-tight">Data Stream</h3>
+<span class="flex h-2.5 w-2.5 rounded-full bg-sky-500 animate-pulse shadow-[0_0_10px_rgba(56,189,248,0.8)]"></span>
+</div>
+<div class="space-y-5 font-mono text-[11px] text-slate-500">
+<div class="p-4 bg-black/5 rounded-2xl border-l-2 border-sky-400 backdrop-blur-md">
+<span class="text-sky-500 font-bold">[12:44:01]</span> ANALYSIS_COMPLETE: candidate_id_9821
+                            <br/><span class="opacity-70">MATCH: 98.4% | STATUS: AUTHENTIC</span>
+</div>
+<div class="p-4 bg-black/5 rounded-2xl border-l-2 border-indigo-400 backdrop-blur-md">
+<span class="text-indigo-500 font-bold">[12:44:02]</span> FRAUD_SHIELD_SCAN: active
+                            <br/><span class="opacity-70">CROSS_REF: LinkedIn, GitHub, Polywork</span>
+</div>
+<div class="p-4 bg-black/5 rounded-2xl border-l-2 border-green-400 backdrop-blur-md">
+<span class="text-green-500 font-bold">[12:44:05]</span> BIOMETRIC_VERIFIED: profile_match_09
+                            <br/><span class="opacity-70">GEO_LOCATION: San Francisco, CA</span>
+</div>
+<div class="p-4 bg-black/5 rounded-2xl border-l-2 border-violet-400 backdrop-blur-md">
+<span class="text-violet-500 font-bold">[12:44:09]</span> GEN_NEBULA_MAP: calculating...
+                            <br/><span class="opacity-70">VECTOR_SPACE: 1,024 dimensions</span>
+</div>
+</div>
+</div>
+<!-- Fraud Shield Status -->
+<div class="bg-gradient-to-br from-on-primary-fixed to-[#002e42] rounded-[32px] p-8 text-white relative overflow-hidden shadow-2xl">
+<div class="absolute top-0 right-0 w-48 h-48 bg-sky-400/10 rounded-full blur-[60px] -mr-20 -mt-20"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-sky-400" data-icon="security">security</span>
+<span class="font-bold uppercase tracking-widest text-[10px] text-sky-300">Fraud Shield Active</span>
+</div>
+<div class="text-3xl font-['Space_Grotesk'] font-bold mb-3 tracking-tight">100% Integrity</div>
+<p class="text-sm text-sky-200/60 leading-relaxed mb-8">Autonomous verification engines have scanned all top candidates. No anomalies detected in current node array.</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="fingerprint">fingerprint</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="policy">policy</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="gavel">gavel</span>
+</div>
+</div>
+<span class="text-[10px] font-bold text-sky-400 bg-sky-400/10 px-3 py-1 rounded-full border border-sky-400/20">Deep-Auth Layer V4</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation (Orb) -->
+<div class="lg:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+<button class="w-16 h-16 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 shadow-[0_0_30px_rgba(56,189,248,0.5)] flex items-center justify-center text-white relative active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="hub">hub</span>
+<span class="absolute -top-1 -right-1 flex h-5 w-5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-5 w-5 bg-red-500 text-[10px] items-center justify-center font-bold">14</span>
+</span>
+</button>
+</div>
+</body></html>

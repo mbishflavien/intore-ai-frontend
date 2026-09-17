@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Satoshi font is not standard on Google Fonts, but user requested it; usually needs custom import. Using Space Grotesk as the closest standard alternative for the 'Satoshi' vibe if not provided, but following the "Keep Satoshi typography" instruction by setting font-family names to it for system fallback or assumed custom availability -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#eff4ff",
+                    "on-primary-fixed": "#001e2c",
+                    "on-tertiary-fixed": "#191c1e",
+                    "on-surface": "#0b1c30",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#e0e3e5",
+                    "surface-container-high": "#dce9ff",
+                    "primary-fixed-dim": "#7bd0ff",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#414546",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "surface-variant": "#d3e4fe",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#c4e7ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-tint": "#00668a",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#5c5f61",
+                    "on-secondary-container": "#fffbff",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f8f9ff",
+                    "on-background": "#0b1c30",
+                    "surface": "#f8f9ff",
+                    "on-secondary-fixed": "#23005c",
+                    "secondary-fixed": "#e9ddff",
+                    "secondary": "#6b38d4",
+                    "surface-container": "#e5eeff",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "on-tertiary": "#ffffff",
+                    "background": "#f8f9ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "secondary-container": "#8455ef",
+                    "on-primary-container": "#004965",
+                    "outline-variant": "#bdc8d1",
+                    "on-surface-variant": "#3e484f",
+                    "inverse-surface": "#213145",
+                    "primary": "#00668a",
+                    "on-primary-fixed-variant": "#004c69",
+                    "tertiary-container": "#afb2b4",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "inverse-primary": "#7bd0ff",
+                    "on-error": "#ffffff",
+                    "outline": "#6e7980",
+                    "primary-container": "#38bdf8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "16px",
+                    "container-max": "1440px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "h2": ["Satoshi", "Space Grotesk", "sans-serif"],
+                    "h1": ["Satoshi", "Space Grotesk", "sans-serif"],
+                    "h3": ["Satoshi", "Space Grotesk", "sans-serif"],
+                    "body-md": ["Inter", "sans-serif"],
+                    "label-sm": ["Satoshi", "Space Grotesk", "sans-serif"],
+                    "body-lg": ["Inter", "sans-serif"]
+            },
+            "fontSize": {
+                    "h2": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "h1": ["4.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "h3": ["2rem", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "body-md": ["1rem", {"lineHeight": "1.6", "letterSpacing": "0px", "fontWeight": "400"}],
+                    "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.7", "letterSpacing": "0.01em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @font-face {
+            font-family: 'Satoshi';
+            src: url('https://cdn.fontshare.com/wf/TTWLNX4Z67G6RE6Z7AOM52L5C7NPPN63/SVMTFMWP6Z6Z7AOM52L5C7NPPN63/PTY5PTY5PTY5PTY5PTY5PTY5.woff2') format('woff2');
+            font-weight: 300 900;
+            font-display: swap;
+            font-style: normal;
+        }
+
+        body {
+            background-color: #f8f9ff;
+            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(132, 85, 239, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+        .aura-dev {
+            /* Background aura shifts based on skill: Sky blue for Alex's Arch DNA */
+            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.3) 0%, transparent 70%);
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .inner-rim {
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 10px 30px -10px rgba(0, 102, 138, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased overflow-x-hidden">
+<!-- Luminous SideNavBar (Using COMPONENTS_13 logic) -->
+<aside class="fixed left-6 top-6 bottom-6 w-64 rounded-[32px] border border-white/20 bg-white/10 dark:bg-black/20 backdrop-blur-3xl flex flex-col gap-8 p-8 h-full z-50 shadow-[0px_0px_50px_0px_rgba(56,189,248,0.15)] font-['Space_Grotesk'] tracking-tight antialiased border-r border-white/10 shadow-[inset_0px_1px_1px_rgba(255,255,255,0.4)]">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center shadow-lg active:scale-95 transform transition-transform duration-200">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h1 class="text-2xl font-bold tracking-tighter text-sky-500 dark:text-sky-400">IntoreAI</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-slate-400">Transcendent UI</p>
+</div>
+</div>
+<nav class="space-y-2 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span>Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">blur_on</span>
+<span>Nebula</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span>Vault</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-sky-400/10 text-sky-500 dark:text-sky-300 border-l-2 border-sky-400 shadow-[0px_0px_15px_rgba(56,189,248,0.2)] transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span>Transcend</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 dark:text-slate-400/50 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto">
+<button class="w-full py-4 rounded-2xl bg-sky-500 text-white font-bold tracking-wide shadow-lg shadow-sky-500/20 hover:scale-[1.02] active:scale-95 transition-transform ease-out">
+            New Pulse
+        </button>
+</div>
+</aside>
+<!-- Unified Luminous Dashboard Content -->
+<main class="ml-72 p-12 max-w-[1440px] mx-auto min-h-screen">
+<!-- Header-less Layout Start -->
+<div class="flex justify-between items-center mb-12">
+<div class="flex items-center gap-6">
+<h2 class="font-h2 text-2xl text-on-surface">Digital Twin Dashboard</h2>
+</div>
+<div class="flex items-center gap-4 text-slate-500">
+<div class="relative flex items-center bg-white/10 rounded-full px-4 py-2 border border-white/20 backdrop-blur-md">
+<span class="material-symbols-outlined text-slate-400 text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-48 p-0 placeholder:text-slate-400" placeholder="Search twins..." type="text"/>
+</div>
+<span class="material-symbols-outlined cursor-pointer hover:text-sky-400 transition-colors p-2 bg-white/20 rounded-full">notifications_active</span>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-sky-400/30">
+<img alt="Recruiter Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARpvQqxvXgkTsttlwllV3x9LFHOJGUhsJ9lTr_JVQ_7OxRZZU39GS_eSSB-QC09VOng96sXoEu7-C1j9MHxgn3oGEE2XccfrP00u8APP5fBC0FYfC6MI2Lf9IIkwH6HDvNv5U-gdNR0DkhsOJvS-8PZACWBlcOOVFL5vQXhAlg2uKpPTBL_A7nP1ygZcXx0nv9iKOFqtXZtnyuKXNTC3SdQvAwBUKfGeNS2Cq6IZRGIAq4uWWHqZt337Wng3KWUGRKg0gyGQ3v3Rg"/>
+</div>
+</div>
+</div>
+<!-- Profile Hero Section -->
+<section class="relative mb-12">
+<!-- Skill-shifting Aura Background -->
+<div class="absolute -top-24 -left-24 w-[500px] h-[500px] aura-dev pointer-events-none opacity-40"></div>
+<div class="flex items-end gap-10 relative z-10">
+<div class="relative">
+<div class="w-48 h-48 rounded-[2.5rem] glass-panel p-2 inner-rim floating">
+<img alt="Alex Rivera" class="w-full h-full object-cover rounded-[2.3rem]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4Qu78aYNKr3UjdXBlHPp4mx7WsJAv8t_ECjpEgjW9iBBN-CAqtup1p-O8nq5i7MCpffcCU60FlIFTh0GceUQTt-QosGVrwJhr86zjfh-7lXBCxv7-C_NcbgzNYGfsqJMg0mdUEfrL3teEpAnJnfOKkRujeNQj_wTtX5sfIglV4HezEHK7vJ5x1GUkwvMkx8gtNKkW2ZVpf8vj6SrKsDbODKibi6rI-Us0lo5qxOuXxTZoMaXIzyaW8lES_r-mLV7NJDr1W601I08"/>
+</div>
+<div class="absolute -bottom-4 -right-4 bg-sky-500 text-white p-3 rounded-2xl shadow-xl border-4 border-surface-bright">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+</div>
+<div class="pb-4">
+<div class="flex items-center gap-4 mb-3">
+<span class="px-4 py-1.5 bg-sky-500/10 text-sky-600 rounded-full text-[10px] font-bold font-h1 tracking-[0.2em] uppercase border border-sky-200/50">Verified Talent</span>
+<span class="text-slate-400 text-sm font-label-sm tracking-tight opacity-70">TWIN-ID: 8892-X</span>
+</div>
+<h2 class="font-h2 text-h2 text-on-surface mb-2">Alex Rivera</h2>
+<p class="font-h3 text-3xl text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 font-bold">Full-Stack Architect</p>
+</div>
+<div class="ml-auto flex gap-4 pb-4">
+<div class="glass-panel px-8 py-6 rounded-3xl inner-rim text-center border-sky-100">
+<p class="text-[10px] font-label-sm text-slate-400 uppercase tracking-widest mb-2">Match Potential</p>
+<p class="text-4xl font-h2 text-sky-500">98%</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Content Grid: Bento Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Timeline Journey (Left Column) -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<div class="glass-panel p-8 rounded-[2.5rem] inner-rim h-full relative overflow-hidden bg-white/40">
+<h4 class="font-h3 text-xl mb-10 flex items-center gap-3">
+<span class="material-symbols-outlined text-sky-500 p-2 bg-sky-50 rounded-xl">route</span>
+                    Timeline Journey
+                </h4>
+<div class="relative pl-8 border-l-2 border-slate-100 dark:border-white/5 space-y-12">
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-green-400 shadow-[0_0_15px_rgba(74,222,128,0.6)] animate-pulse"></div>
+<p class="text-[10px] font-label-sm text-sky-500 mb-1 tracking-widest">CURRENT</p>
+<h5 class="font-bold text-on-surface text-lg">Senior Developer @ Lumina Tech</h5>
+<p class="text-sm text-slate-500 mt-2 leading-relaxed">Leading the transition to micro-frontend architecture using Next.js and IntoreAI workflows.</p>
+</div>
+<div class="relative opacity-60">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-slate-300"></div>
+<p class="text-[10px] font-label-sm text-slate-400 mb-1">2021 — 2023</p>
+<h5 class="font-bold text-on-surface">Cloud Architect @ Sphere Systems</h5>
+<p class="text-sm text-slate-500 mt-2">Optimized serverless functions, reducing latency by 40%.</p>
+</div>
+<div class="relative opacity-60">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-slate-300"></div>
+<p class="text-[10px] font-label-sm text-slate-400 mb-1">2018 — 2021</p>
+<h5 class="font-bold text-on-surface">Full Stack Dev @ Origin Digital</h5>
+<p class="text-sm text-slate-500 mt-2">Developed core e-commerce engine for 15+ global brands.</p>
+</div>
+<div class="absolute top-0 bottom-0 left-[-2px] w-[2px] bg-gradient-to-b from-green-400 to-transparent"></div>
+</div>
+</div>
+</div>
+<!-- Skills & Growth (Center/Right Column) -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- Growth Card: AI Insights -->
+<div class="glass-panel p-10 rounded-[2.5rem] inner-rim bg-gradient-to-br from-white/90 to-sky-50/50 border-white">
+<div class="flex justify-between items-start mb-12">
+<div>
+<h4 class="font-h3 text-2xl mb-2">Growth Card</h4>
+<p class="text-sm text-slate-500">AI-driven gap analysis &amp; potential scaling</p>
+</div>
+<div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white px-5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-sky-500/20">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+                        Elite Level
+                    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Skill Gaps -->
+<div>
+<p class="text-[10px] font-label-sm text-slate-400 uppercase tracking-widest mb-6">Target Gaps for Seniority</p>
+<ul class="space-y-5">
+<li class="flex items-center gap-4">
+<div class="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)]"></div>
+<span class="text-sm font-semibold text-on-surface">Distributed Systems Theory</span>
+<span class="ml-auto text-[10px] font-bold bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full border border-indigo-100">+12% Match</span>
+</li>
+<li class="flex items-center gap-4">
+<div class="w-3 h-3 rounded-full bg-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.4)]"></div>
+<span class="text-sm font-semibold text-on-surface">Post-Quantum Cryptography</span>
+<span class="ml-auto text-[10px] font-bold bg-sky-50 text-sky-600 px-3 py-1 rounded-full border border-sky-100">+8% Match</span>
+</li>
+<li class="flex items-center gap-4 opacity-40">
+<div class="w-3 h-3 rounded-full bg-slate-300"></div>
+<span class="text-sm font-semibold text-on-surface">Team Leadership (Advanced)</span>
+<span class="ml-auto text-[10px] font-bold bg-slate-50 text-slate-400 px-3 py-1 rounded-full border border-slate-100">Locked</span>
+</li>
+</ul>
+</div>
+<!-- Match Nebula Visual -->
+<div class="glass-panel rounded-[2rem] p-8 bg-white/60 flex items-center justify-center relative border-white">
+<div class="absolute inset-0 aura-dev opacity-20"></div>
+<div class="text-center relative z-10">
+<p class="text-5xl font-h2 text-on-surface mb-1">114k</p>
+<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Potential Salary Delta</p>
+<div class="mt-6 flex gap-1.5 justify-center">
+<div class="h-1.5 w-10 rounded-full bg-sky-500"></div>
+<div class="h-1.5 w-10 rounded-full bg-sky-500"></div>
+<div class="h-1.5 w-10 rounded-full bg-indigo-500"></div>
+<div class="h-1.5 w-10 rounded-full bg-slate-200"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Digital Twin Specs (Skill DNA) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="glass-panel p-8 rounded-3xl inner-rim hover:scale-[1.02] transition-transform bg-white/40 border-sky-100/50">
+<span class="material-symbols-outlined text-sky-500 mb-4 text-3xl">psychology</span>
+<h6 class="font-bold text-base mb-2">Architecture DNA</h6>
+<p class="text-xs text-slate-500 leading-relaxed">High modularity, focus on observability and cloud-native resilience.</p>
+</div>
+<div class="glass-panel p-8 rounded-3xl inner-rim hover:scale-[1.02] transition-transform bg-white/40 border-indigo-100/50">
+<span class="material-symbols-outlined text-indigo-500 mb-4 text-3xl">speed</span>
+<h6 class="font-bold text-base mb-2">Velocity Score</h6>
+<p class="text-xs text-slate-500 leading-relaxed">Top 1% in code-to-production cycles with zero regression history.</p>
+</div>
+<div class="glass-panel p-8 rounded-3xl inner-rim hover:scale-[1.02] transition-transform bg-white/40 border-emerald-100/50">
+<span class="material-symbols-outlined text-emerald-500 mb-4 text-3xl">hub</span>
+<h6 class="font-bold text-base mb-2">Ecosystem Fit</h6>
+<p class="text-xs text-slate-500 leading-relaxed">Seamless integration with distributed Azure/AWS micro-services.</p>
+</div>
+</div>
+<!-- Bottom Action Strip -->
+<div class="flex items-center justify-between p-10 glass-panel rounded-[2.5rem] inner-rim bg-white/50 border-sky-200/40 shadow-xl">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-lg shadow-sky-500/30">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h5 class="font-h3 text-xl mb-1">Instant Activation</h5>
+<p class="text-sm text-slate-500">Alex Rivera is open to direct reach-outs via Hire Studio.</p>
+</div>
+</div>
+<button class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-sky-500/30 hover:opacity-90 active:scale-95 transition-all">
+                    Launch Studio
+                </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Orb Navigation (Mandatory for responsive) -->
+<div class="md:hidden fixed bottom-8 right-8 z-[100]">
+<div class="w-16 h-16 rounded-full bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center shadow-2xl text-white cursor-pointer hover:scale-110 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</div>
+</div>
+</body></html>

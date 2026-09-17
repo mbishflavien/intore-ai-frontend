@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#eff4ff",
+                        "on-primary-fixed": "#001e2c",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-surface": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface-container-high": "#dce9ff",
+                        "primary-fixed-dim": "#7bd0ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#414546",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#c4e7ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-tint": "#00668a",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#5c5f61",
+                        "on-secondary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed": "#23005c",
+                        "secondary-fixed": "#e9ddff",
+                        "secondary": "#6b38d4",
+                        "surface-container": "#e5eeff",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#8455ef",
+                        "on-primary-container": "#004965",
+                        "outline-variant": "#bdc8d1",
+                        "on-surface-variant": "#3e484f",
+                        "inverse-surface": "#213145",
+                        "primary": "#00668a",
+                        "on-primary-fixed-variant": "#004c69",
+                        "tertiary-container": "#afb2b4",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "inverse-primary": "#7bd0ff",
+                        "on-error": "#ffffff",
+                        "outline": "#6e7980",
+                        "primary-container": "#38bdf8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "16px",
+                        "container-max": "1440px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "h3": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Space Grotesk"],
+                        "body-lg": ["Inter"],
+                        "satoshi": ["Space Grotesk", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "h2": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "h1": ["4.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "h3": ["2rem", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                        "body-md": ["1rem", {"lineHeight": "1.6", "letterSpacing": "0px", "fontWeight": "400"}],
+                        "label-sm": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-lg": ["1.125rem", {"lineHeight": "1.7", "letterSpacing": "0.01em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-rim {
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 0 40px rgba(56, 189, 248, 0.1);
+        }
+        .aura-bg {
+            background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(132, 85, 239, 0.1) 0%, transparent 40%);
+        }
+        .drift {
+            animation: drift-animation 6s ease-in-out infinite;
+        }
+        @keyframes drift-animation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-[#f8faff] font-body-md text-on-surface min-h-screen aura-bg selection:bg-primary-container/30 overflow-hidden">
+<!-- Luminous Dashboard Shell -->
+<div class="flex h-screen w-full p-6 gap-6 relative z-10">
+<!-- SideNavBar from COMPONENTS_13 -->
+<aside class="fixed left-6 top-6 bottom-6 w-64 rounded-[32px] border border-white/20 bg-white/10 backdrop-blur-3xl shadow-[0px_0px_50px_0px_rgba(56,189,248,0.15)] flex flex-col font-['Space_Grotesk'] tracking-tight antialiased z-50">
+<div class="flex flex-col gap-8 p-8 h-full">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white">auto_awesome</span>
+</div>
+<div>
+<h1 class="text-2xl font-bold tracking-tighter text-sky-500">IntoreAI</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">Transcendent UI</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="text-sm font-medium">Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">blur_on</span>
+<span class="text-sm font-medium">Nebula</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="text-sm font-medium">Vault</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-sky-400/10 text-sky-500 border-l-2 border-sky-400 shadow-[0px_0px_15px_rgba(56,189,248,0.2)]" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-sm font-medium">Transcend</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500/70 hover:text-sky-400 hover:bg-white/5 hover:backdrop-blur-xl transition-all duration-500 ease-out active:scale-95 transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="space-y-6">
+<button class="w-full py-4 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold text-sm shadow-lg hover:shadow-sky-500/20 active:scale-95 transition-all duration-200">
+                    New Pulse
+                </button>
+<div class="flex items-center gap-3">
+<img alt="Recruiter Profile" class="h-10 w-10 rounded-full border-2 border-white/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGN5dZkTNuPNeXGFkklX7g9dHw02yvxn_YmPviwm93Fh1VSPOTomXnSUeygy7b601_iN-DBMqSIu8Gx3d2p6Wusyrp5LW4NFKDS700GyVBQm47_ytLcRS_8Kzr-N265TfdYsep5Dkc6AythMvxwUWr0xarNmYSaOp4_SYMbKHZXP7a313iqZsfZHn7oz3m06nBLctRzL164yZZqdqFaALz6jx3K6hgszzEr7W_JpYqrSIf9VoFx5aQdGEjFHTqnjuwAIrHzDgG_LE"/>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-on-surface">Alex Sovereign</span>
+<span class="text-[10px] text-slate-500">Master Curator</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas (Luminous Glass Shell) -->
+<main class="ml-72 flex-1 rounded-[40px] border border-white/40 bg-white/40 backdrop-blur-2xl shadow-[inset_0px_1px_1px_rgba(255,255,255,0.6),0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col font-satoshi">
+<!-- Deep-Dive Interface Content -->
+<div class="p-10 flex-1 flex flex-col">
+<!-- Context Header -->
+<div class="mb-10 flex justify-between items-end">
+<div>
+<div class="flex items-center gap-2 mb-3">
+<span class="px-2 py-1 bg-sky-500/10 text-sky-500 text-[10px] font-bold rounded uppercase tracking-widest border border-sky-500/20">Extraction Active</span>
+<span class="text-slate-400 text-xs">•</span>
+<span class="text-slate-400 text-xs font-medium">Candidate: Marcus Aurelius Chen</span>
+</div>
+<h2 class="text-4xl font-black text-on-surface tracking-tighter">Deep-Dive Interface</h2>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 rounded-2xl border border-white/60 bg-white/40 backdrop-blur shadow-sm text-sm font-bold flex items-center gap-2 hover:bg-white/60 transition-all active:scale-95">
+<span class="material-symbols-outlined text-lg">download</span> Export Proof
+                    </button>
+<button class="px-6 py-3 rounded-2xl bg-on-surface text-white text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-xl">
+<span class="material-symbols-outlined text-lg">verified</span> Accept Candidate
+                    </button>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="grid grid-cols-12 gap-10 flex-1 overflow-hidden min-h-0">
+<!-- Left: Original Artifact -->
+<div class="col-span-6 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-4 px-2">
+<span class="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">description</span> Original Artifact
+                        </span>
+<div class="flex gap-2">
+<button class="p-2 rounded-xl bg-white/60 hover:bg-white text-slate-600 transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm">zoom_in</span>
+</button>
+<button class="p-2 rounded-xl bg-white/60 hover:bg-white text-slate-600 transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm">fullscreen</span>
+</button>
+</div>
+</div>
+<div class="flex-1 bg-white/30 backdrop-blur-xl rounded-[32px] border border-white/60 glass-rim p-10 overflow-y-auto scrollbar-hide relative drift">
+<div class="bg-white p-14 shadow-2xl min-h-full rounded-lg font-serif text-slate-800 leading-relaxed relative">
+<div class="border-b-2 border-slate-100 pb-8 mb-8 text-center">
+<h3 class="text-3xl font-bold mb-2">Marcus Aurelius Chen</h3>
+<p class="text-sm text-slate-400 tracking-wide">San Francisco, CA • marcus.chen@nebula.io • (555) 012-3456</p>
+</div>
+<div class="mb-10">
+<h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-100 pb-1">Executive Summary</h4>
+<p class="text-sm">Strategic technologist with 12+ years experience in <span class="bg-sky-400/20 px-1 rounded ring-1 ring-sky-400/30">distributed systems</span> and <span class="bg-sky-400/20 px-1 rounded ring-1 ring-sky-400/30">large-scale AI infrastructure</span>. Proven track record of scaling engineering teams from zero to 100+ while maintaining sub-millisecond latency requirements.</p>
+</div>
+<div class="mb-10">
+<h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-100 pb-1">Professional Experience</h4>
+<div class="space-y-8">
+<div>
+<div class="flex justify-between items-baseline mb-2">
+<h5 class="text-md font-bold">Principal Engineer @ Nebula Cloud</h5>
+<span class="text-xs text-slate-400 italic">2018 — Present</span>
+</div>
+<ul class="text-sm list-disc pl-5 space-y-3">
+<li>Architected the <span class="bg-sky-400/20 px-1 rounded ring-1 ring-sky-400/30">Quantum Flow engine</span>, reducing data ingestion bottlenecks by 42%.</li>
+<li>Led a cross-functional team of 25 engineers to deploy <span class="bg-sky-400/20 px-1 rounded ring-1 ring-sky-400/30">Multi-Region Kubernetes</span> clusters across 14 zones.</li>
+</ul>
+</div>
+<div>
+<div class="flex justify-between items-baseline mb-2">
+<h5 class="text-md font-bold">Senior Architect @ DataHorizon</h5>
+<span class="text-xs text-slate-400 italic">2014 — 2018</span>
+</div>
+<ul class="text-sm list-disc pl-5 space-y-3 text-slate-600">
+<li>Implemented <span class="bg-sky-400/20 px-1 rounded ring-1 ring-sky-400/30">Real-time Analytics pipeline</span> handling 4M events per second.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: AI-Extracted Truth -->
+<div class="col-span-6 flex flex-col overflow-hidden">
+<div class="flex items-center justify-between mb-4 px-2">
+<span class="text-xs font-bold uppercase tracking-[0.15em] text-sky-500 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">auto_awesome</span> AI-Extracted Truth
+                        </span>
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full bg-sky-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">AI</div>
+<div class="w-7 h-7 rounded-full bg-violet-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">ML</div>
+</div>
+<span class="text-xs font-black text-slate-400">98.4% Confidence</span>
+</div>
+</div>
+<div class="flex-1 space-y-6 overflow-y-auto scrollbar-hide pb-6">
+<!-- Summary Card -->
+<div class="bg-white/60 backdrop-blur-xl rounded-3xl border border-white p-8 glass-rim shadow-sm">
+<h4 class="text-xl font-bold mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-sky-500" style="font-variation-settings: 'FILL' 1;">stars</span>
+                                Cognitive Profile
+                            </h4>
+<div class="grid grid-cols-3 gap-6">
+<div class="bg-sky-50/50 p-5 rounded-2xl border border-sky-100 shadow-sm">
+<span class="text-[10px] uppercase font-black text-sky-600 block mb-2 tracking-widest">Impact Score</span>
+<span class="text-3xl font-black text-sky-700">9.2</span>
+</div>
+<div class="bg-violet-50/50 p-5 rounded-2xl border border-violet-100 shadow-sm">
+<span class="text-[10px] uppercase font-black text-violet-600 block mb-2 tracking-widest">Tenure Index</span>
+<span class="text-3xl font-black text-violet-700">High</span>
+</div>
+<div class="bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100 shadow-sm">
+<span class="text-[10px] uppercase font-black text-emerald-600 block mb-2 tracking-widest">Culture Sync</span>
+<span class="text-3xl font-black text-emerald-700">96%</span>
+</div>
+</div>
+</div>
+<!-- Technical DNA -->
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-white/40 backdrop-blur-lg rounded-3xl border border-white p-6 shadow-sm">
+<h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-5">Core Architecture</h5>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 rounded-xl bg-sky-500/10 ring-1 ring-sky-500/20">
+<span class="text-sm font-bold text-sky-700">Distributed Systems</span>
+<span class="material-symbols-outlined text-sky-500 text-sm">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-sky-500/10 ring-1 ring-sky-500/20">
+<span class="text-sm font-bold text-sky-700">AI Infrastructure</span>
+<span class="material-symbols-outlined text-sky-500 text-sm">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/50 text-slate-400">
+<span class="text-sm font-medium">Cloud Orchestration</span>
+<span class="text-[10px] font-bold">Processing...</span>
+</div>
+</div>
+</div>
+<div class="bg-white/40 backdrop-blur-lg rounded-3xl border border-white p-6 shadow-sm">
+<h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-5">The "Truth" Signal</h5>
+<div class="space-y-5">
+<div>
+<div class="flex justify-between text-[10px] font-black mb-2">
+<span class="text-slate-500 uppercase tracking-tighter">Verification Level</span>
+<span class="text-sky-600">CERTIFIED</span>
+</div>
+<div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-[1px]">
+<div class="h-full w-full bg-gradient-to-r from-sky-400 via-indigo-500 to-sky-500 rounded-full"></div>
+</div>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed italic">"Extracted tenure aligns with external metadata across Nebula and Horizon repos."</p>
+</div>
+</div>
+</div>
+<!-- Live Feed -->
+<div class="bg-[#0b1c30] rounded-[24px] p-7 text-sky-300 font-mono text-xs leading-relaxed border border-sky-900 shadow-2xl">
+<div class="flex items-center gap-3 mb-4 text-sky-400 font-bold border-b border-sky-800 pb-3">
+<span class="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse"></span>
+                                NEURAL_EXTRACT_LIVE_STREAM
+                            </div>
+<div class="space-y-1.5 opacity-90">
+<p class="opacity-60">&gt; Parsing segment: [Experience_01]</p>
+<p class="text-white">&gt; MATCH FOUND: "Distributed Systems" &lt;--&gt; Job_DNA:L4_ARCH</p>
+<p class="opacity-60">&gt; Cross-referencing GitHub activity for "Quantum Flow"</p>
+<p class="text-sky-400 font-bold">&gt; VERIFIED: 1,402 Commits detected in period 2018-2023</p>
+<p class="opacity-60">&gt; Syncing visual highlights to UI...</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Controls -->
+<div class="fixed bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-white/30 backdrop-blur-3xl border border-white/50 rounded-full p-2.5 shadow-[0_20px_50px_rgba(56,189,248,0.2)] z-[60]">
+<button class="w-14 h-14 rounded-full bg-white/50 flex items-center justify-center text-slate-600 hover:bg-white transition-all shadow-sm active:scale-90">
+<span class="material-symbols-outlined">undo</span>
+</button>
+<button class="px-10 py-4 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-black text-sm flex items-center gap-4 shadow-xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined">analytics</span>
+        Run Deep Sync
+    </button>
+<button class="w-14 h-14 rounded-full bg-white/50 flex items-center justify-center text-slate-600 hover:bg-white transition-all shadow-sm active:scale-90">
+<span class="material-symbols-outlined">redo</span>
+</button>
+</div>
+<!-- Decorative Aura Elements -->
+<div class="fixed -bottom-40 -left-40 w-[500px] h-[500px] bg-sky-400/15 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed top-20 right-20 w-[400px] h-[400px] bg-indigo-400/10 rounded-full blur-[100px] pointer-events-none"></div>
+</body></html>
