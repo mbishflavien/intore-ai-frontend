@@ -20,7 +20,8 @@ import {
   X,
   Video,
   Phone,
-  MapPin
+  MapPin,
+  ExternalLink
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -297,13 +298,19 @@ export default function ValidationEnginePage() {
                   </div>
                   <div>
                     <h2 className="text-3xl font-display font-black text-on-surface">{selectedCandidate.fullName}</h2>
-                    <div className="flex gap-3 mt-1">
+                    <div className="flex gap-3 mt-1 flex-wrap">
                       <span className="flex items-center gap-1 text-[10px] font-bold text-sky-600 uppercase tracking-widest bg-sky-50 px-2 py-1 rounded-full">
                         AI Certified Match
                       </span>
                       <span className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-2 py-1 rounded-full">
                         Rank #{selectedCandidate.rank}
                       </span>
+                      <Link
+                        href={`/recruiter/candidates/${selectedCandidate.applicantId}?jobId=${jobId}`}
+                        className="flex items-center gap-1 text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/60 border border-white px-2 py-1 rounded-full hover:text-sky-600 hover:bg-sky-50 transition-colors"
+                      >
+                        <ExternalLink className="w-3 h-3" /> Full 360° Scorecard
+                      </Link>
                     </div>
                   </div>
                 </div>
