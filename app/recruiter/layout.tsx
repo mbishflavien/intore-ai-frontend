@@ -11,7 +11,7 @@ import {
   Briefcase, 
   Users, 
   FolderHeart, 
-//   Lock,
+  Lock,
   Plus,
   Rocket,
   LogOut,
@@ -104,7 +104,7 @@ export default function RecruiterLayout({
     { icon: Briefcase, href: "/recruiter/jobs", label: "Job Workspace" },
     { icon: Users, href: "/recruiter/talent", label: "Talent Pool" },
     { icon: FolderHeart, href: "/recruiter/archive", label: "Archive" },
-    // { icon: Lock, href: "/recruiter/admin", label: "Admin" },
+    { icon: Lock, href: "/recruiter/admin", label: "Admin" },
   ];
 
   return (
