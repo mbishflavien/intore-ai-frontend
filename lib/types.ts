@@ -651,3 +651,79 @@ export interface SystemHealth {
   database: 'connected' | 'disconnected';
   lastBackup?: string;
 }
+
+export type TrainingLevel = "beginner" | "intermediate" | "advanced";
+
+export interface TrainingQuizQuestion {
+  question: string;
+  options: string[];
+  answerIndex: number;
+  explanation: string;
+}
+
+export interface TrainingUnit {
+  id: string;
+  title: string;
+  minutes: number;
+  content: string;
+  checklist: string[];
+  quiz?: TrainingQuizQuestion;
+}
+
+export interface TrainingModule {
+  id: string;
+  slug: string;
+  skill: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  level: TrainingLevel;
+  estimatedMinutes: number;
+  relatedSkills: string[];
+  tags: string[];
+  units: TrainingUnit[];
+  externalResources: ProofReference[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TrainingProgress {
+  id: string;
+  applicantId: string;
+  moduleId: string;
+  completedUnitIds: string[];
+  startedAt: string;
+  lastActivityAt: string;
+  completedAt?: string;
+}
+
+export interface TrainingRecommendation {
+  skill: string;
+  module?: Pick<TrainingModule, "id" | "slug" | "title" | "level" | "estimatedMinutes">;
+  jobTitles: string[];
+  jobCount: number;
+  reason: string;
+}
+
+export interface PracticeChallengeLite {
+  challengeId: string;
+  jobId: string;
+  jobTitle: string;
+  title: string;
+  type: ProofChallengeType;
+  requiredSkills: string[];
+}
+
+export interface MentorQuizView {
+  question: string;
+  options: string[];
+  questionIndex: number;
+}
+
+export interface MentorChatResponse {
+  sessionId: string;
+  skill: string;
+  reply: string;
+  quiz: MentorQuizView | null;
+  correctCount: number;
+}

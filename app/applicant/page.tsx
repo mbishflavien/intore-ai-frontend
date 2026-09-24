@@ -13,7 +13,9 @@ import {
   Layers,
   Award,
   MapPin,
-  Clock
+  Clock,
+  GraduationCap,
+  Sparkles
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -154,6 +156,37 @@ export default function ApplicantDashboard() {
 
           {/* Side Recommendations */}
           <div className="space-y-8">
+          <div className="flex justify-between items-center">
+            <h2 className="font-display text-2xl font-bold text-on-surface">Upskill</h2>
+            <Link href="/applicant/training" className="text-[10px] font-bold text-sky-500 uppercase tracking-widest bg-sky-50 px-2 py-1 rounded-full hover:bg-sky-100 transition-colors">
+              Learning Hub
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Link href="/applicant/training" className="glass-card p-4 hover:border-sky-200 transition-all group">
+              <span className="p-2.5 rounded-xl bg-gradient-to-tr from-sky-400 to-indigo-500 text-white shadow-md inline-flex mb-2">
+                <GraduationCap className="w-4 h-4" />
+              </span>
+              <p className="text-sm font-bold text-on-surface group-hover:text-sky-600 transition-colors">Skill tracks</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">Close your gaps</p>
+            </Link>
+            <Link href="/applicant/mentor" className="glass-card p-4 hover:border-emerald-200 transition-all group">
+              <span className="p-2.5 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-500 text-white shadow-md inline-flex mb-2">
+                <Sparkles className="w-4 h-4" />
+              </span>
+              <p className="text-sm font-bold text-on-surface group-hover:text-emerald-600 transition-colors">AI mentor</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">Get coached live</p>
+            </Link>
+            <Link href="/applicant/training#practice" className="glass-card p-4 hover:border-amber-200 transition-all group">
+              <span className="p-2.5 rounded-xl bg-gradient-to-tr from-amber-400 to-orange-500 text-white shadow-md inline-flex mb-2">
+                <Zap className="w-4 h-4" />
+              </span>
+              <p className="text-sm font-bold text-on-surface group-hover:text-amber-600 transition-colors">Practice</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">Challenge drills</p>
+            </Link>
+          </div>
+
           <div className="flex justify-between items-center">
             <h2 className="font-display text-2xl font-bold text-on-surface">Recommended</h2>
             <span className="text-[10px] font-bold text-sky-500 uppercase tracking-widest bg-sky-50 px-2 py-1 rounded-full">

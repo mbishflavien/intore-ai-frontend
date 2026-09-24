@@ -125,6 +125,11 @@ export default function ApplicantAssessmentPage() {
           <div style={{ marginTop: "12px", color: mode === "required" ? "#b45309" : "#0f766e", fontWeight: "600" }}>
             {mode === "required" ? "Required assessment" : "Optional assessment boost"}
           </div>
+          <div style={{ marginTop: "10px" }}>
+            <Link href={`/applicant/training/practice/${challenge.id}`} style={{ color: "#0f766e", textDecoration: "underline", fontWeight: 600, fontSize: "14px" }}>
+              Practice this challenge without affecting your record →
+            </Link>
+          </div>
         </div>
 
         <div style={{ padding: "14px", borderRadius: "10px", background: "#f8fafc", color: "#334155", marginBottom: "16px" }}>
