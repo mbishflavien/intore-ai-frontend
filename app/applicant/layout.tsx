@@ -14,7 +14,9 @@ import {
   User,
   LogOut,
   Target,
-  Dna
+  Dna,
+  GraduationCap,
+  Bot
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -143,6 +145,8 @@ export default function ApplicantLayout({
     { icon: Compass, href: "/applicant/jobs", label: "Browse Jobs" },
     { icon: Layers, href: "/applicant/applications", label: "My Applications" },
     { icon: Dna, href: "/applicant/challenges", label: "Assessments" },
+    { icon: GraduationCap, href: "/applicant/training", label: "Learning Hub" },
+    { icon: Bot, href: "/applicant/mentor", label: "AI Mentor" },
     { icon: User, href: "/applicant/profile", label: "My Profile" },
   ];
 

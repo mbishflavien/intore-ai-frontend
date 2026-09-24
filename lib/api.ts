@@ -5,14 +5,20 @@ import type {
   CreateJobInput,
   CreateProofChallengeInput,
   Job,
+  MentorChatResponse,
   Notification,
+  PracticeChallengeLite,
   ProofChallenge,
+  ProofEvaluation,
   ProofHireConfig,
   ProofSubmission,
   PublicUser,
   ScreeningRunRecord,
   SystemHealth,
   TalentProfile,
+  TrainingModule,
+  TrainingProgress,
+  TrainingRecommendation,
 } from "@/lib/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
@@ -182,6 +188,38 @@ export const api = {
       }),
     list: (token: string) =>
       request<{ interviews: any[] }>("/api/interviews", { token }),
+  },
+  training: {
+    listModules: () => request<{ modules: TrainingModule[] }>("/api/training"),
+    getModule: (id: string) => request<{ module: TrainingModule }>(`/api/training/${id}`),
+    getProgress: (token: string) =>
+      request<{ progress: TrainingProgress[] }>("/api/training/progress", { token }),
+    markUnitComplete: (moduleId: string, unitId: string, token: string) =>
+      request<{ progress: TrainingProgress[] }>(`/api/training/progress/${moduleId}`, {
+        method: "POST",
+        body: JSON.stringify({ unitId }),
+        token,
+      }),
+    getRecommendations: (token: string) =>
+      request<{ recommendations: TrainingRecommendation[] }>("/api/training/recommendations", { token }),
+    listPracticeChallenges: (token: string) =>
+      request<{ challenges: PracticeChallengeLite[] }>("/api/training/practice", { token }),
+    getPracticeChallenge: (challengeId: string, token: string) =>
+      request<{ challenge: ProofChallenge }>(`/api/training/practice/${challengeId}`, { token }),
+    practiceEvaluate: (challengeId: string, code: string, token: string) =>
+      request<{ evaluation: ProofEvaluation; practice: boolean }>("/api/training/practice/evaluate", {
+        method: "POST",
+        body: JSON.stringify({ challengeId, code }),
+        token,
+      }),
+  },
+  mentor: {
+    chat: (data: { skill?: string; message: string; sessionId?: string }, token: string) =>
+      request<MentorChatResponse>("/api/mentor/chat", {
+        method: "POST",
+        body: JSON.stringify(data),
+        token,
+      }),
   },
   admin: {
     getStats: (token: string) => request<{
