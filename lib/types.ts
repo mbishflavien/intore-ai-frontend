@@ -93,6 +93,9 @@ export interface TalentProfile {
   id?: string;
   phone?: string;
   ipAddress?: string;
+  resumeUploaded?: boolean;
+  resumeFileName?: string;
+  resumeUploadedAt?: string;
 }
 
 export interface ProofChallengeTestCase {

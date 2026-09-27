@@ -83,7 +83,7 @@ export default function RecruiterLayout({
 
     if (nextState && unreadCount > 0 && token) {
       try {
-        await api.notifications.readAll(token);
+        await api.notifications.markRecruiterFeedRead(token);
         setUnreadCount(0);
       } catch (err) {
         console.error("Failed to mark notifications as read:", err);

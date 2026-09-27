@@ -4,6 +4,14 @@ All notable changes to IntoreAI (backend **and** frontend) are documented here.
 
 ## [Unreleased]
 
+### Frontend — Guided apply flow (profile + resume enforced)
+
+- **`lib/profile.ts`** (new) — client mirror of the backend completeness validator (labels kept in sync).
+- **`lib/types.ts`** — `TalentProfile` gains `resumeUploaded/resumeFileName/resumeUploadedAt`.
+- **`app/applicant/jobs/[id]/page.tsx`** — one-click "Apply Now" replaced with "Start Application" + 4-step `ApplyWizard` (Profile checklist → Resume upload+parse → Review recruiter-view snapshot with skill match → Done/Assessment-next). Backend 400s surface inline; required ProofHire becomes a post-apply CTA instead of a blocker.
+- **`app/applicant/profile/page.tsx`** — 5MB upload guard, resume stamped (`resumeUploaded`, file name, timestamp) on save, completeness banner in header.
+- **`lib/api.ts` + `app/recruiter/layout.tsx`** — new `markRecruiterFeedRead` hitting `POST /api/recruiter/notifications/read-all` (pairs with the now read-only recruiter feed).
+
 ### Frontend — Week 1 High priorities (Sam + Friend)
 
 #### Friend #2 — Reusable component library (new `components/ui/`)
