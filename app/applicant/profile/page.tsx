@@ -21,6 +21,9 @@ import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import type { TalentProfile } from "@/lib/types";
 import { getTalentProfileFullName } from "@/lib/types";
+import { checkProfileCompleteness } from "@/lib/profile";
+
+const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 
 export default function ApplicantProfilePage() {
   const { token, updateUser } = useAuth();
@@ -29,6 +32,9 @@ export default function ApplicantProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [status, setStatus] = useState("Your profile is ready.");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+
+  const completeness = checkProfileCompleteness(profile);
 
   useEffect(() => {
     if (!token) return;
@@ -46,11 +52,15 @@ export default function ApplicantProfilePage() {
 
   const handleFileUpload = async (files: FileList | null) => {
     if (!files || files.length === 0 || !token) return;
+    const file = files[0];
+    if (file.size > MAX_RESUME_BYTES) {
+      setStatus("Resume too large — please upload a file under 5MB.");
+      return;
+    }
     setIsParsing(true);
     setStatus("Extracting profile data...");
 
     try {
-      const file = files[0];
       const bytes = await file.arrayBuffer();
       const base64 = arrayBufferToBase64(bytes);
       
@@ -64,6 +74,7 @@ export default function ApplicantProfilePage() {
       if (!response.ok) throw new Error(data.error || "Parsing failed");
 
       setProfile(data.profile);
+      setResumeFile(file);
       setStatus("Extraction complete. Review and save your profile.");
     } catch (err: any) {
       setStatus(`Extraction failed: ${err.message}`);
@@ -76,7 +87,14 @@ export default function ApplicantProfilePage() {
     if (!profile || !token) return;
     setIsSaving(true);
     try {
-      await api.profiles.save(profile, token);
+      const stamped: TalentProfile = {
+        ...profile,
+        resumeUploaded: resumeFile ? true : (profile.resumeUploaded ?? false),
+        resumeFileName: resumeFile ? resumeFile.name : profile.resumeFileName,
+        resumeUploadedAt: resumeFile ? new Date().toISOString() : profile.resumeUploadedAt,
+      };
+      const { profile: saved } = await api.profiles.save(stamped, token);
+      setProfile(saved);
       
       // Update the user object in AuthContext so the navbar reflects the new name
       updateUser({
@@ -98,6 +116,15 @@ export default function ApplicantProfilePage() {
         <div>
           <h1 className="font-display text-4xl font-bold tracking-tight text-on-surface">Profile</h1>
           <p className="text-slate-500">Manage your profile and professional presence.</p>
+          <div
+            role="status"
+            className={`mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold ${completeness.complete ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}
+          >
+            <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+            {completeness.complete
+              ? `Profile complete${profile?.resumeUploaded ? " · resume attached" : " · resume missing"}`
+              : `Incomplete: ${completeness.missing.join(" · ")}`}
+          </div>
         </div>
 
         <button

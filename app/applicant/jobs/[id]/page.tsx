@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
+import { checkProfileCompleteness } from "@/lib/profile";
+import { Modal, Badge } from "@/components/ui";
 
 interface Job {
   id: string;
@@ -57,6 +59,9 @@ interface TalentProfile {
   availability: { status: "Available" | "Open to Opportunities" | "Not Available"; type: "Full-time" | "Part-time" | "Contract" };
   phone?: string;
   source: "umurava_profile" | "resume_upload" | "spreadsheet_row";
+  resumeUploaded?: boolean;
+  resumeFileName?: string;
+  resumeUploadedAt?: string;
 }
 
 export default function JobDetailsPage() {
@@ -72,6 +77,12 @@ export default function JobDetailsPage() {
   const [isApplying, setIsApplying] = useState(false);
   const [error, setError] = useState("");
   const [proofSubmission, setProofSubmission] = useState<{ evaluation?: { score: number; passed: boolean } } | null>(null);
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [wizardStep, setWizardStep] = useState(0);
+  const [isUploadingResume, setIsUploadingResume] = useState(false);
+
+  const completeness = checkProfileCompleteness(profile);
+  const resumeReady = profile?.resumeUploaded === true;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -120,9 +131,62 @@ export default function JobDetailsPage() {
     fetchData();
   }, [jobId, token]);
 
+  const refreshProfile = async () => {
+    if (!token) return;
+    try {
+      const { profile: savedProfile } = await api.profiles.get(token);
+      setProfile(savedProfile);
+    } catch {
+      console.log("No profile found");
+    }
+  };
+
+  const handleResumeUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0 || !token) return;
+    const file = files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Resume too large — please upload a file under 5MB.");
+      return;
+    }
+    setIsUploadingResume(true);
+    setError("");
+    try {
+      const bytes = await file.arrayBuffer();
+      let binary = "";
+      const chunk = new Uint8Array(bytes);
+      for (let i = 0; i < chunk.length; i++) binary += String.fromCharCode(chunk[i]);
+      const base64 = btoa(binary);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000"}/api/profiles/parse`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mimeType: file.type || "application/pdf", base64 }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Parsing failed");
+      const stamped: TalentProfile = {
+        ...data.profile,
+        resumeUploaded: true,
+        resumeFileName: file.name,
+        resumeUploadedAt: new Date().toISOString(),
+      };
+      const { profile: saved } = await api.profiles.save(stamped, token);
+      setProfile(saved);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload resume");
+    } finally {
+      setIsUploadingResume(false);
+    }
+  };
+
   const handleApply = async () => {
     if (!token || !profile) {
       router.push("/applicant/profile");
+      return;
+    }
+
+    const local = checkProfileCompleteness(profile);
+    if (!local.complete || !resumeReady) {
+      setWizardStep(!local.complete ? 0 : 1);
       return;
     }
 
@@ -132,6 +196,7 @@ export default function JobDetailsPage() {
     try {
       await api.applications.create({ jobId, profile }, token);
       setHasApplied(true);
+      setWizardStep(3);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to apply");
     } finally {
@@ -396,12 +461,11 @@ export default function JobDetailsPage() {
                 </Link>
               ) : (
                 <button
-                  onClick={handleApply}
-                  disabled={isApplying}
+                  onClick={() => { setError(""); setWizardStep(0); setWizardOpen(true); }}
                   className="btn-primary group relative flex items-center gap-4 px-10 py-4 rounded-full text-white font-bold shadow-2xl transition-all hover:scale-105 active:scale-95"
                 >
                   <span className="relative flex items-center gap-2">
-                    {isApplying ? "Applying..." : "Apply Now"}
+                    Start Application
                     <Zap className="w-5 h-5" />
                   </span>
                 </button>
@@ -410,6 +474,224 @@ export default function JobDetailsPage() {
           )}
         </div>
       </div>
+
+      {job && (
+        <ApplyWizard
+          open={wizardOpen}
+          onClose={() => setWizardOpen(false)}
+          step={wizardStep}
+          setStep={setWizardStep}
+          job={job}
+          profile={profile}
+          completenessMissing={completeness.missing}
+          profileComplete={completeness.complete}
+          resumeReady={resumeReady}
+          isApplying={isApplying}
+          isUploadingResume={isUploadingResume}
+          error={error}
+          proofPassed={proofSubmission?.evaluation?.passed ?? false}
+          onUpload={handleResumeUpload}
+          onRefreshProfile={refreshProfile}
+          onSubmit={handleApply}
+        />
+      )}
     </div>
+  );
+}
+
+const WIZARD_STEPS = ["Profile", "Resume", "Review", "Done"] as const;
+
+function ApplyWizard({
+  open,
+  onClose,
+  step,
+  setStep,
+  job,
+  profile,
+  completenessMissing,
+  profileComplete,
+  resumeReady,
+  isApplying,
+  isUploadingResume,
+  error,
+  proofPassed,
+  onUpload,
+  onRefreshProfile,
+  onSubmit,
+}: {
+  open: boolean;
+  onClose: () => void;
+  step: number;
+  setStep: (n: number) => void;
+  job: Job;
+  profile: TalentProfile | null;
+  completenessMissing: string[];
+  profileComplete: boolean;
+  resumeReady: boolean;
+  isApplying: boolean;
+  isUploadingResume: boolean;
+  error: string;
+  proofPassed: boolean;
+  onUpload: (files: FileList | null) => void;
+  onRefreshProfile: () => void;
+  onSubmit: () => void;
+}) {
+  const matchedSkills = job.requiredSkills.filter((s) =>
+    profile?.skills.some((ps) => ps.name.toLowerCase() === s.toLowerCase()),
+  );
+  const assessmentRequired = job.proofHire?.enabled && job.proofHire.mode === "required";
+
+  return (
+    <Modal open={open} onClose={onClose} title="Apply for this role" wide>
+      <ol aria-label="Application steps" className="mb-6 flex items-center gap-2">
+        {WIZARD_STEPS.map((label, i) => {
+          const done = i < step;
+          const current = i === step;
+          return (
+            <li key={label} className="flex flex-1 items-center gap-2">
+              <span
+                aria-hidden="true"
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${done ? "bg-emerald-500 text-white" : current ? "bg-gradient-to-r from-sky-400 to-indigo-500 text-white" : "bg-slate-100 text-slate-400"}`}
+              >
+                {done ? "✓" : i + 1}
+              </span>
+              <span className={`text-xs font-bold ${current ? "text-on-surface" : "text-slate-400"}`}>{label}</span>
+              {i < WIZARD_STEPS.length - 1 && <span aria-hidden="true" className="h-px flex-1 bg-slate-200" />}
+              <span className="sr-only">{label}: {done ? "done" : current ? "current" : "upcoming"}</span>
+            </li>
+          );
+        })}
+      </ol>
+
+      {error && (
+        <p role="alert" className="mb-4 rounded-2xl border border-red-200 bg-red-50/70 px-4 py-3 text-sm font-semibold text-red-700">
+          {error}
+        </p>
+      )}
+
+      {step === 0 && (
+        <div>
+          <h3 className="font-display text-lg font-bold text-on-surface">Step 1 — Your profile</h3>
+          <p className="mt-1 text-sm text-slate-500">Recruiters see this profile. Every item below is required.</p>
+          {profileComplete ? (
+            <p className="mt-4 flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm font-bold text-emerald-700">
+              <CheckCircle2 className="h-5 w-5" aria-hidden="true" /> Profile complete — {profile?.skills.length} skills, {profile?.experience.length} experience entries.
+            </p>
+          ) : (
+            <ul className="mt-4 space-y-2">
+              {completenessMissing.map((item) => (
+                <li key={item} className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50/60 px-4 py-2.5 text-sm font-semibold text-amber-800">
+                  <AlertCircle className="h-4 w-4 shrink-0" aria-hidden="true" /> {item}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/applicant/profile" className="btn-secondary rounded-xl px-5 py-2.5 text-sm">
+              {profileComplete ? "Review profile" : "Complete profile"}
+            </Link>
+            <button onClick={onRefreshProfile} className="btn-ghost rounded-xl px-4 py-2.5 text-sm">
+              Re-check
+            </button>
+            <button
+              onClick={() => setStep(1)}
+              disabled={!profileComplete}
+              className="btn-primary rounded-xl px-5 py-2.5 text-sm disabled:opacity-50"
+            >
+              Continue to resume
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === 1 && (
+        <div>
+          <h3 className="font-display text-lg font-bold text-on-surface">Step 2 — Resume</h3>
+          <p className="mt-1 text-sm text-slate-500">A parsed resume is required. Upload a PDF (max 5MB).</p>
+          {resumeReady ? (
+            <p className="mt-4 flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-sm font-bold text-emerald-700">
+              <FileText className="h-5 w-5" aria-hidden="true" /> {profile?.resumeFileName ?? "Resume attached"}
+              {profile?.resumeUploadedAt && <span className="font-medium text-emerald-600">· {new Date(profile.resumeUploadedAt).toLocaleDateString()}</span>}
+            </p>
+          ) : (
+            <label className="mt-4 block cursor-pointer rounded-2xl border-2 border-dashed border-sky-300 bg-sky-50/40 px-6 py-8 text-center transition-colors hover:border-sky-400 hover:bg-sky-50/70">
+              <span className="sr-only">Upload resume PDF</span>
+              <input type="file" accept=".pdf,.txt,application/pdf,text/plain" className="hidden" disabled={isUploadingResume} onChange={(e) => onUpload(e.target.files)} />
+              {isUploadingResume ? (
+                <span className="inline-flex items-center gap-2 text-sm font-bold text-sky-700">
+                  <span aria-hidden="true" className="h-5 w-5 animate-spin rounded-full border-2 border-sky-200 border-t-sky-500" /> Parsing resume…
+                </span>
+              ) : (
+                <span className="text-sm font-bold text-sky-700">Click to upload your resume</span>
+              )}
+            </label>
+          )}
+          <div className="mt-5 flex gap-3">
+            <button onClick={() => setStep(0)} className="btn-ghost rounded-xl px-4 py-2.5 text-sm">Back</button>
+            <button
+              onClick={() => setStep(2)}
+              disabled={!resumeReady}
+              className="btn-primary rounded-xl px-5 py-2.5 text-sm disabled:opacity-50"
+            >
+              Continue to review
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === 2 && (
+        <div>
+          <h3 className="font-display text-lg font-bold text-on-surface">Step 3 — Review</h3>
+          <p className="mt-1 text-sm text-slate-500">This is what the recruiter receives.</p>
+          <div className="glass-panel mt-4 space-y-3 p-5 text-sm">
+            <p><strong>{profile?.firstName} {profile?.lastName}</strong> <span className="text-slate-500">· {profile?.headline} · {profile?.location}</span></p>
+            <p className="flex flex-wrap gap-1.5">
+              {profile?.skills.slice(0, 8).map((s) => (
+                <Badge key={s.name} tone={matchedSkills.some((m) => m.toLowerCase() === s.name.toLowerCase()) ? "success" : "default"}>{s.name}</Badge>
+              ))}
+            </p>
+            <p className="text-slate-600">
+              <strong className="text-emerald-700">{matchedSkills.length}/{job.requiredSkills.length}</strong> required skills matched
+              {matchedSkills.length < job.requiredSkills.length && (
+                <span className="text-slate-500"> · missing: {job.requiredSkills.filter((s) => !matchedSkills.some((m) => m.toLowerCase() === s.toLowerCase())).join(", ")}</span>
+              )}
+            </p>
+            <p className="text-slate-600">Resume: <strong>{profile?.resumeFileName ?? "attached"}</strong></p>
+            {assessmentRequired && (
+              <p className="rounded-xl border border-indigo-200 bg-indigo-50/60 px-3 py-2 text-indigo-800">
+                {proofPassed ? "Skill assessment passed — attached to your application." : "This role has a required skill assessment — you can complete it right after applying."}
+              </p>
+            )}
+          </div>
+          <div className="mt-5 flex gap-3">
+            <button onClick={() => setStep(1)} className="btn-ghost rounded-xl px-4 py-2.5 text-sm">Back</button>
+            <button onClick={onSubmit} disabled={isApplying} className="btn-primary rounded-xl px-6 py-2.5 text-sm disabled:opacity-50">
+              {isApplying ? "Submitting…" : "Submit application"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === 3 && (
+        <div className="text-center">
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+            <CheckCircle2 className="h-8 w-8" aria-hidden="true" />
+          </span>
+          <h3 className="mt-4 font-display text-xl font-bold text-on-surface">Application submitted</h3>
+          {assessmentRequired && !proofPassed ? (
+            <div className="mt-3">
+              <p className="text-sm text-slate-500">One last step — pass the skill assessment to strengthen your ranking.</p>
+              <Link href={`/proofhire/applicant/jobs/${job.id}`} className="btn-primary mt-4 inline-flex rounded-xl px-6 py-3 text-sm">
+                Start assessment <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          ) : (
+            <Link href="/applicant/applications" className="btn-secondary mt-4 inline-flex rounded-xl px-6 py-3 text-sm">
+              Track application status
+            </Link>
+          )}
+        </div>
+      )}
+    </Modal>
   );
 }
