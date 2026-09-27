@@ -34,7 +34,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-aura-gradient p-6 relative overflow-hidden">
       {/* Decorative Nebula Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-sky-400/10 blur-[120px] rounded-full animate-pulse" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full animate-pulse delay-1000" />
 
       <div className="w-full max-w-[440px] relative z-10 animate-fade-in">
         <div className="text-center mb-10">

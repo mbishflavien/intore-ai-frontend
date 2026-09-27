@@ -354,7 +354,6 @@ export function RecruiterWorkbench() {
           <div className="resume-box">
             <p className="section-kicker">Resume upload</p>
             <div
-              className="dropzone"
               onDragEnter={(event) => {
                 event.preventDefault();
                 setIsDraggingResumes(true);
@@ -371,13 +370,7 @@ export function RecruiterWorkbench() {
                 }
               }}
               onDrop={(event) => void handleResumeDrop(event)}
-              style={{
-                border: isDraggingResumes ? "2px solid #0f766e" : "2px dashed rgba(15, 118, 110, 0.35)",
-                borderRadius: "16px",
-                padding: "20px",
-                background: isDraggingResumes ? "rgba(15, 118, 110, 0.08)" : "rgba(255, 255, 255, 0.03)",
-                marginBottom: "12px",
-              }}
+              className={`mb-3 rounded-2xl border-2 p-5 transition-colors ${isDraggingResumes ? "border-emerald-600 bg-emerald-600/10" : "border-dashed border-emerald-700/35 bg-white/[0.03]"}`}
             >
               <input type="file" multiple accept=".pdf,.txt,application/pdf,text/plain" onChange={handleResumeUpload} />
               <p className="subtle">

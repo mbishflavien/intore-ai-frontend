@@ -4,6 +4,28 @@ All notable changes to IntoreAI (backend **and** frontend) are documented here.
 
 ## [Unreleased]
 
+### Frontend — Week 1 High priorities (Sam + Friend)
+
+#### Friend #2 — Reusable component library (new `components/ui/`)
+- `Button` (primary/secondary/ghost/danger, sm/md/lg/icon, loading + `aria-busy`), `Card` (+Header/Title/Content), `Modal` (Escape-to-close, scrim, aria-modal), `Badge` (8 tones, color+text pairs), `Table` (accessible, empty state), `Toast` (aria-live polite, auto-dismiss), `Avatar`, `Dropdown`/`DropdownItem`, `Tabs` (tablist semantics), `Skeleton`/`JobListSkeleton`/`CardSkeleton` (Tailwind-only, no inline styles). Barrel export `components/ui/index.ts`.
+
+#### Friend #1 — Inline styles → design system (92 → 3)
+- Rewrote `app/page.tsx`, `app/proofhire/applicant/jobs/[id]/page.tsx`, `app/proofhire/applicant/job/[id]/questions/page.tsx` in glass-morphism (zero `style={{}}`, Lucide icons replacing emoji, a11y labels).
+- `animationDelay` props → Tailwind `delay-*` classes (applicant/recruiter dashboards, login/register nebulae); static widths → arbitrary values; dropzone states → conditional Tailwind.
+- Remaining 3 `style={{width}}` are data-driven progress bars (training %, score bars, parsing %) — standard practice (shadcn Progress uses the same pattern).
+
+#### Sam #2 — Application status tracker (`app/applicant/applications/page.tsx`)
+- 5-stage pipeline Applied → Screened → Shortlisted → Interview → Decision with color-coded nodes (emerald completed / sky pulsing current / slate upcoming / red failed) + sr-only state text.
+- Stage resolution from `Application.status + screeningResult + proofScore` plus interview detection via `interview_scheduled` notifications; Decision reflects accepted/rejected.
+- Stats header (total/active/shortlisted/offers), `Tabs` filter (All/Active/Shortlisted/Decisions), AI-fit + assessment chips, `Skeleton` loading, "How the pipeline works" + Prep Room CTA sidebar.
+
+#### Sam #1 — Candidate prep mode UI (`app/applicant/prep/page.tsx`, new route `/applicant/prep`)
+- Prep Room reusing training API: quick drills extracted from all module quizzes (role/skill search with datalist, level filter, A/B/C/D answering with instant right/wrong feedback + explanations + study links, streak + localStorage answer memory) + employer-challenge tab (filtered `listPracticeChallenges` → practice pages) + AI Mentor CTA.
+- Wired into applicant sidebar (`ClipboardCheck`, "Prep Room") between Assessments and Learning Hub; linked from applications sidebar tip and ProofHire assessment page context.
+
+#### Verified
+- `npm run typecheck` passes; `npm run build` passes (23 routes, +1 `/applicant/prep`).
+
 ### Backend — `intore-ai-backend`
 
 #### New: Applicant self-training (Upskill)

@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { ArrowLeft, Lightbulb, Paperclip, Users, ClipboardList, ShieldCheck } from "lucide-react";
 import { api } from "@/lib/api";
+import { Card, Badge, Skeleton } from "@/components/ui";
 
 interface Question {
   challengeId: string;
@@ -35,94 +37,98 @@ export default function PreviousQuestionsPage() {
   }, [jobId]);
 
   if (loading) {
-    return <div style={{ padding: "40px", textAlign: "center" }}>Loading questions...</div>;
+    return (
+      <div className="mx-auto max-w-3xl space-y-4 p-6" aria-label="Loading questions">
+        <Skeleton className="h-8 w-2/3" />
+        <Skeleton lines={3} />
+        <Skeleton className="h-40 w-full" />
+      </div>
+    );
   }
 
   if (error) {
-    return <div style={{ padding: "40px", textAlign: "center", color: "#dc2626" }}>{error}</div>;
+    return (
+      <div className="mx-auto max-w-3xl p-6">
+        <Card className="border-red-200 bg-red-50/60 text-center">
+          <p className="font-semibold text-red-600" role="alert">{error}</p>
+        </Card>
+      </div>
+    );
   }
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "24px" }}>
-      <div style={{ marginBottom: "24px" }}>
-        <Link href={`/applicant/jobs/${jobId}`} style={{ color: "#4f46e5", textDecoration: "none", fontWeight: "600" }}>
-          Back to job
+    <div className="mx-auto max-w-3xl space-y-6 p-6">
+      <div>
+        <Link
+          href={`/applicant/jobs/${jobId}`}
+          className="inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 hover:underline"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to job
         </Link>
-        <h1 style={{ fontSize: "28px", fontWeight: "bold", color: "#1a1a2e", marginTop: "12px" }}>
+        <h1 className="mt-3 font-display text-3xl font-black tracking-tight text-on-surface">
           Technical Questions for This Role
         </h1>
-        <p style={{ color: "#64748b", marginTop: "8px" }}>
+        <p className="mt-2 text-slate-500">
           See what kinds of technical questions others faced when applying for this position.
           This helps you prepare and apply with confidence.
         </p>
       </div>
 
       {questions.length === 0 ? (
-        <div style={{ background: "white", borderRadius: "12px", padding: "32px", textAlign: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
-          <div style={{ fontSize: "48px", marginBottom: "12px" }}>📋</div>
-          <p style={{ color: "#64748b" }}>No previous questions recorded yet for this position.</p>
-          <p style={{ color: "#94a3b8", fontSize: "14px", marginTop: "8px" }}>
+        <Card padding="lg" className="text-center">
+          <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-[20px] bg-slate-100 text-slate-400">
+            <ClipboardList className="h-8 w-8" aria-hidden="true" />
+          </span>
+          <p className="font-semibold text-slate-500">No previous questions recorded yet for this position.</p>
+          <p className="mt-2 text-sm text-slate-400">
             Be the first to complete a technical challenge and help others prepare!
           </p>
-        </div>
+        </Card>
       ) : (
-        <div style={{ display: "grid", gap: "16px" }}>
+        <div className="grid gap-4">
           {questions.map((q, index) => (
-            <div
-              key={q.challengeId}
-              style={{
-                background: "white",
-                borderRadius: "12px",
-                padding: "20px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <span style={{ padding: "4px 10px", background: "#e0e7ff", color: "#4338ca", borderRadius: "999px", fontSize: "13px", fontWeight: 600, textTransform: "capitalize" }}>
-                    {q.type || "coding"}
-                  </span>
-                  <span style={{ padding: "4px 10px", background: "#f3f4f6", color: "#64748b", borderRadius: "999px", fontSize: "12px" }}>
-                    #{index + 1}
-                  </span>
+            <Card key={q.challengeId} padding="md">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Badge tone="info" className="capitalize">{q.type || "coding"}</Badge>
+                  <Badge tone="default">#{index + 1}</Badge>
                 </div>
                 {q.applicantPosition && (
-                  <span style={{ fontSize: "13px", color: "#64748b" }}>
-                    Applied for: <strong style={{ color: "#374151" }}>{q.applicantPosition}</strong>
+                  <span className="text-[13px] text-slate-500">
+                    Applied for: <strong className="text-slate-700">{q.applicantPosition}</strong>
                   </span>
                 )}
               </div>
 
-              <div style={{ color: "#374151", fontWeight: 500, marginBottom: "12px" }}>
+              <p className="mb-3 font-medium text-slate-700">
                 {q.title || "Technical Challenge"}
-              </div>
+              </p>
 
-              <div style={{ display: "flex", gap: "16px", fontSize: "13px", color: "#64748b" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <span>💡</span>
-                  <span>{q.hintCount} hints available</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <span>📎</span>
-                  <span>{q.referenceCount} references</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <span>👥</span>
-                  <span>{q.submissionCount} submissions</span>
-                </div>
+              <div className="flex flex-wrap gap-4 text-[13px] text-slate-500">
+                <span className="inline-flex items-center gap-1.5">
+                  <Lightbulb className="h-4 w-4 text-amber-500" aria-hidden="true" /> {q.hintCount} hints available
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Paperclip className="h-4 w-4 text-sky-500" aria-hidden="true" /> {q.referenceCount} references
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Users className="h-4 w-4 text-indigo-500" aria-hidden="true" /> {q.submissionCount} submissions
+                </span>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}
 
-      <div style={{ marginTop: "32px", padding: "20px", background: "#f0fdf4", borderRadius: "12px", border: "1px solid #bbf7d0" }}>
-        <h3 style={{ color: "#166534", fontWeight: 600, marginBottom: "8px" }}>Why see previous questions?</h3>
-        <p style={{ color: "#15803d", fontSize: "14px" }}>
+      <Card padding="md" className="border-emerald-200 bg-emerald-50/50">
+        <h3 className="flex items-center gap-2 font-bold text-emerald-800">
+          <ShieldCheck className="h-5 w-5" aria-hidden="true" /> Why see previous questions?
+        </h3>
+        <p className="mt-2 text-sm leading-6 text-emerald-700">
           By understanding the types of challenges for this role, you can prepare better and know what to expect.
           All questions shown are anonymized - you see the category but not the exact problem.
         </p>
-      </div>
+      </Card>
     </div>
   );
 }
