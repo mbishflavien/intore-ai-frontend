@@ -235,10 +235,11 @@ function MetricCard({ title, value, trend, icon: Icon, color, delay }: any) {
     amber: "text-amber-400 bg-amber-50",
   };
 
+  const delayClass = delay === "0.2s" ? "delay-200" : delay === "0.3s" ? "delay-300" : "";
+
   return (
-    <div 
-      className="glass-card p-6 animate-float flex flex-col h-full" 
-      style={{ animationDelay: delay }}
+    <div
+      className={`glass-card p-6 animate-float flex flex-col h-full ${delayClass}`.trim()}
     >
       <div className="flex justify-between items-start mb-4">
         <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">{title}</span>
@@ -253,7 +254,7 @@ function MetricCard({ title, value, trend, icon: Icon, color, delay }: any) {
         </span>
       </div>
       <div className="mt-4 h-1.5 w-full bg-slate-100/50 rounded-full overflow-hidden flex">
-        <div className={`h-full opacity-60 rounded-full ${color === 'sky' ? 'bg-sky-400' : color === 'indigo' ? 'bg-indigo-400' : color === 'cyan' ? 'bg-cyan-400' : 'bg-amber-400'}`} style={{ width: '70%' }}></div>
+        <div className={`h-full opacity-60 rounded-full ${color === 'sky' ? 'bg-sky-400' : color === 'indigo' ? 'bg-indigo-400' : color === 'cyan' ? 'bg-cyan-400' : 'bg-amber-400'} w-[70%]`}></div>
       </div>
     </div>
   );

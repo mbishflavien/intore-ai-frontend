@@ -239,11 +239,11 @@ function MetricCard({ title, value, trend, icon: Icon, color, delay }: { title: 
     indigo: "text-indigo-400 bg-indigo-50",
     cyan: "text-cyan-400 bg-cyan-50",
   };
+  const delayClass = delay === "0.1s" ? "delay-100" : delay === "0.2s" ? "delay-200" : "";
 
   return (
-    <div 
-      className="glass-card p-6 animate-float" 
-      style={{ animationDelay: delay }}
+    <div
+      className={`glass-card p-6 animate-float ${delayClass}`.trim()}
     >
       <div className="flex justify-between items-start mb-4">
         <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{title}</span>
