@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
+import { JobListSkeleton } from "@/components/ui";
 
 interface Job {
   id: string;
@@ -65,8 +66,12 @@ export default function ArchivePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500"></div>
+      <div className="space-y-6 animate-fade-in" aria-busy="true" aria-label="Loading">
+        <div>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-on-surface">Archive</h1>
+          <p className="text-slate-500">Loading archived jobs.</p>
+        </div>
+        <JobListSkeleton />
       </div>
     );
   }

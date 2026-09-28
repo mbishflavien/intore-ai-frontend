@@ -15,4 +15,4 @@ export { Toast, type ToastTone } from "./Toast";
 export { Avatar } from "./Avatar";
 export { Dropdown, DropdownItem } from "./Dropdown";
 export { Tabs } from "./Tabs";
-export { Skeleton, JobListSkeleton, CardSkeleton } from "./Skeleton";
+export { Skeleton, JobListSkeleton, CardSkeleton, DashboardSkeleton, TableSkeleton } from "./Skeleton";
