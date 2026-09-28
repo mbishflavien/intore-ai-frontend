@@ -4,6 +4,9 @@ All notable changes to IntoreAI (backend **and** frontend) are documented here.
 
 ## [Unreleased]
 
+### Infra — Week 1 Mugisha #3: web container
+- **`Dockerfile`** (new, multi-stage node:20-alpine, `NEXT_PUBLIC_API_BASE_URL` build-arg) + **`package.json`** gains `npm start` (`next start`) for production serving. Consumed by the backend repo's `docker-compose.yml` (`../intore-ai-frontend` build context).
+
 ### Frontend — Week 2 Friend: skeletons, dark mode, responsive sidebar
 
 #### Friend #3 — Loading skeletons (rollout complete)
