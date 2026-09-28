@@ -3,24 +3,28 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { 
-  Search, 
+import {
+  Search,
   Bell,
   CheckCircle2,
-  Settings, 
-  Home, 
-  Compass, 
-  Layers, 
+  Settings,
+  Home,
+  Compass,
+  Layers,
   User,
   LogOut,
   Target,
   Dna,
   GraduationCap,
   Bot,
-  ClipboardCheck
+  ClipboardCheck,
+  Menu,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
+import { useSidebar } from "@/lib/use-sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import type { Notification as AppNotification, TalentProfile } from "@/lib/types";
 
 export default function ApplicantLayout({
@@ -35,6 +39,7 @@ export default function ApplicantLayout({
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [profile, setProfile] = useState<TalentProfile | null>(null);
+  const { collapsed, toggleCollapsed, mobileOpen, setMobileOpen } = useSidebar();
 
   const unreadCount = notifications.filter((notification) => !notification.isRead).length;
 
@@ -149,14 +154,24 @@ export default function ApplicantLayout({
     { icon: ClipboardCheck, href: "/applicant/prep", label: "Prep Room" },
     { icon: GraduationCap, href: "/applicant/training", label: "Learning Hub" },
     { icon: Bot, href: "/applicant/mentor", label: "AI Mentor" },
+    { icon: Bell, href: "/applicant/notifications", label: "Notifications" },
     { icon: User, href: "/applicant/profile", label: "My Profile" },
   ];
 
   return (
     <div className="min-h-screen bg-aura-gradient">
       {/* Top Glass Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center max-w-7xl mx-auto bg-white/40 backdrop-blur-2xl rounded-2xl mt-4 mx-6 px-6 py-3 border border-white/20 shadow-[0_20px_50px_rgba(56,189,248,0.1)]">
-        <div className="flex items-center gap-4">
+      <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center max-w-7xl mx-auto bg-white/40 backdrop-blur-2xl rounded-2xl mt-4 mx-4 px-4 py-3 border border-white/20 shadow-[0_20px_50px_rgba(56,189,248,0.1)] sm:mx-6 sm:px-6 dark:bg-slate-900/60 dark:border-white/10">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 text-slate-500 transition-all hover:bg-white/20 lg:hidden dark:text-slate-300"
+          >
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          </button>
           <Link href="/applicant" className="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-indigo-500 font-display">
             IntoreAI
           </Link>
@@ -170,7 +185,8 @@ export default function ApplicantLayout({
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <ThemeToggle />
           <div className="relative" ref={bellRef}>
             <button
               className="p-2 text-slate-500 hover:bg-white/20 transition-all rounded-full"
@@ -267,41 +283,25 @@ export default function ApplicantLayout({
         </div>
       </header>
 
-      {/* Suspended Glass Pillar (Sidebar) */}
-      <aside className="fixed left-6 top-24 bottom-24 w-20 flex flex-col items-center py-8 justify-between z-40 glass-pillar">
-        <div className="flex flex-col items-center gap-1 mb-8">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-sky-200">
-            <Target className="w-5 h-5" />
+      {/* Responsive sidebar: collapsible pillar on desktop, drawer on mobile */}
+      <AppSidebar
+        items={navItems}
+        pathname={pathname}
+        collapsed={collapsed}
+        onToggleCollapsed={toggleCollapsed}
+        mobileOpen={mobileOpen}
+        onCloseMobile={() => setMobileOpen(false)}
+        brandIcon={Target}
+        ariaLabel="Applicant sidebar"
+        bottomSlot={
+          <div className="p-3 text-slate-300 dark:text-slate-500">
+            <Settings className="h-6 w-6" />
           </div>
-        </div>
-
-        <nav className="flex flex-col gap-6">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link 
-                key={item.href}
-                href={item.href} 
-                className={`p-3 rounded-full transition-all duration-300 hover:scale-110 ${
-                  isActive 
-                    ? "bg-gradient-to-b from-sky-400 to-indigo-500 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)]" 
-                    : "text-slate-400 hover:text-sky-500"
-                }`}
-                title={item.label}
-              >
-                <item.icon className="w-6 h-6" />
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="mt-auto p-3 text-slate-300">
-          <Settings className="w-6 h-6" />
-        </div>
-      </aside>
+        }
+      />
 
       {/* Main Content Area */}
-      <main className="pl-36 pr-12 pt-32 pb-12 max-w-[1440px] mx-auto">
+      <main className={`px-4 pb-12 pt-28 sm:px-6 lg:pr-12 lg:pt-32 max-w-[1440px] mx-auto ${collapsed ? "lg:pl-36" : "lg:pl-72"}`}>
         {children}
       </main>
     </div>

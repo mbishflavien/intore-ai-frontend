@@ -168,6 +168,8 @@ export const api = {
   notifications: {
     list: (token: string) => request<{ notifications: Notification[] }>("/api/notifications", { token }),
     readAll: (token: string) => request<{ success: boolean }>("/api/notifications/read-all", { method: "POST", token }),
+    markOne: (id: string, token: string) =>
+      request<{ success: boolean }>(`/api/notifications/${id}/read`, { method: "POST", token }),
     markRecruiterFeedRead: (token: string) =>
       request<{ success: boolean }>("/api/recruiter/notifications/read-all", { method: "POST", token }),
     listUnread: (token: string) => request<{ notifications: Array<{ id: string; jobTitle: string; candidateName: string; createdAt: string }>; unreadCount: number }>("/api/recruiter/notifications", { token }),

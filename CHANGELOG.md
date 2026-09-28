@@ -4,6 +4,39 @@ All notable changes to IntoreAI (backend **and** frontend) are documented here.
 
 ## [Unreleased]
 
+### Frontend — Week 2 Friend: skeletons, dark mode, responsive sidebar
+
+#### Friend #3 — Loading skeletons (rollout complete)
+- New `DashboardSkeleton` (stat widgets + panels) and `TableSkeleton` (header + rows, `rows` prop) in `components/ui/Skeleton.tsx`; barrel export updated; base `Skeleton` shimmer now dark-aware.
+- All remaining full-page spinners replaced with contextual skeletons + headings (`aria-busy`): recruiter dashboard/jobs/job-detail/applicants/talent/archive, applicant dashboard/challenges/training/training-detail. Button-level spinners (login, save, resume parse) intentionally kept.
+
+#### Friend #4 — Dark mode toggle (persisted)
+- `lib/theme.tsx` ThemeProvider (light/dark, localStorage `intore-theme`, OS preference default, `color-scheme` sync) + no-FOUC boot script in `app/layout.tsx`.
+- `components/ThemeToggle.tsx` (Sun/Moon, 44px, `aria-pressed`) mounted in both recruiter and applicant headers.
+- Tailwind v4 class-based dark variant (`@custom-variant dark`); `app/globals.css` dark layer: dark aura gradient, dark glass-card/panel/pillar + secondary/ghost buttons, slate text-ramp remap so existing pages adapt without rewrites. Accent colors unchanged (contrast-safe both themes).
+
+#### Friend #5 — Responsive collapsible sidebar
+- New `lib/use-sidebar.ts` (persisted collapsed state, mobile drawer + scroll lock) and `components/AppSidebar.tsx` shared by both layouts.
+- Desktop (lg+): icon pillar ↔ labeled rail toggle (persisted); tablet/mobile (<lg): hamburger in header opens slide-over drawer with overlay + Escape close (`role=dialog`, `aria-modal`), labels always shown in drawer.
+- Main content padding now responsive (`px-4 → sm:px-6 → lg:pl-36/72`) instead of fixed `pl-36`; headers adapt (`mx-4/px-4` on mobile, dark surfaces).
+
+### Frontend — Week 2 Sam: ProofHire timer/autosave, saved jobs, notifications center
+
+#### Sam #3 — ProofHire challenge UI (`app/proofhire/applicant/jobs/[id]/page.tsx`)
+- Countdown timer (challenge `timeLimit` or 60-min fallback, deadline persisted per job in localStorage so refresh keeps time), red urgency under 5 min, auto-submit once at zero.
+- Dual progress bars: time-elapsed + assessment progress (loaded → editing → draft saved → evaluated), `role=progressbar` + `aria-live` status.
+- Autosave every 30s when dirty (server draft + localStorage backup on every cycle), local backup restored on reload, server copy wins when present, offline-backup badge, `beforeunload` guard for unsaved work.
+- Mobile: sticky bottom Save/Submit bar on small screens, responsive type scale, desktop actions hidden on mobile.
+
+#### Sam #4 — Saved/bookmarked jobs (`lib/saved-jobs.ts`, `app/applicant/jobs/page.tsx`)
+- localStorage bookmark store (`intore_saved_jobs_v1`, ids only, cross-tab `intore:saved-jobs` events); bookmark toggle (44px target, `aria-pressed`) on every job tile.
+- All/Saved tabs with counts, search now covers title + location + skills, `JobListSkeleton` loading, empty states per tab.
+
+#### Sam #5 — Notifications center (`app/applicant/notifications/page.tsx`, new `/applicant/notifications`)
+- Full-page center: All/Unread/type filters with counts, newest-first, per-item Mark-as-read (`POST /api/notifications/:id/read`) + Mark-all-read, optimistic updates with rollback, `CardSkeleton` loading, empty states.
+- Deep links: job notifications → job page, interview invites → applications; sidebar gains Notifications entry; bell badge/polling unchanged.
+- `lib/api.ts` gains `notifications.markOne(id, token)`.
+
 ### Frontend — Guided apply flow (profile + resume enforced)
 
 - **`lib/profile.ts`** (new) — client mirror of the backend completeness validator (labels kept in sync).
