@@ -35,6 +35,7 @@ import {
   Layers,
   FlaskConical,
   MessageSquare,
+  GitCompare,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -47,7 +48,6 @@ import type {
 } from "@/lib/types";
 
 type Tab = "overview" | "proofhire" | "interviews" | "profile";
-
 const SCORE_COLORS: Record<string, string> = {
   skills: "from-sky-400 to-sky-500",
   experience: "from-indigo-400 to-indigo-500",
@@ -255,6 +255,32 @@ export default function CandidateScorecardPage() {
     URL.revokeObjectURL(url);
   };
 
+  const handleExportPDF = async () => {
+    if (!candidate) return;
+    const { jsPDF } = await import("jspdf");
+    const { default: html2canvas } = await import("html2canvas");
+
+    const element = document.getElementById("scorecard-content");
+    if (!element) return;
+
+    const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+    let yOffset = 0;
+    while (yOffset < imgHeight) {
+      if (yOffset > 0) pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, -yOffset, pageWidth, imgHeight);
+      yOffset += pageHeight;
+    }
+
+    pdf.save(`scorecard-${candidate.fullName.replace(/\s+/g, "-").toLowerCase()}.pdf`);
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-8 animate-fade-in">
@@ -304,8 +330,7 @@ export default function CandidateScorecardPage() {
     <div className="space-y-8 animate-fade-in max-w-6xl">
 
       {/* Breadcrumb + export */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between">        <div className="flex items-center gap-3">
           <button
             onClick={() => router.back()}
             className="p-2 hover:bg-white/60 rounded-full transition-colors text-slate-400 hover:text-slate-700"
@@ -325,15 +350,32 @@ export default function CandidateScorecardPage() {
             <span className="text-slate-600 font-semibold">{fullName}</span>
           </div>
         </div>
-        <button
-          onClick={handleExportCSV}
-          className="flex items-center gap-2 px-4 py-2.5 bg-white/60 border border-white text-slate-600 rounded-2xl text-sm font-bold hover:bg-white/80 transition-all shadow-sm"
-        >
-          <Download className="w-4 h-4" /> Export CSV
-        </button>
+        <div className="flex items-center gap-3">
+          {interviews.length > 0 && (
+            <Link
+              href={`/recruiter/candidates/${candidateId}/compare?jobId=${jobId}`}
+              className="flex items-center gap-2 px-4 py-2.5 bg-white/60 border border-white text-slate-600 rounded-2xl text-sm font-bold hover:bg-white/80 transition-all shadow-sm"
+            >
+              <GitCompare className="w-4 h-4" /> Compare Interviewers
+            </Link>
+          )}
+          <button
+            onClick={handleExportPDF}
+            className="flex items-center gap-2 px-4 py-2.5 bg-white/60 border border-white text-slate-600 rounded-2xl text-sm font-bold hover:bg-white/80 transition-all shadow-sm"
+          >
+            <FileText className="w-4 h-4" /> Export PDF
+          </button>
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center gap-2 px-4 py-2.5 bg-white/60 border border-white text-slate-600 rounded-2xl text-sm font-bold hover:bg-white/80 transition-all shadow-sm"
+          >
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
+        </div>
       </div>
 
       {/* Candidate hero card */}
+      <div id="scorecard-content" className="space-y-8">
       <div className="glass-card p-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
 
@@ -1004,6 +1046,7 @@ export default function CandidateScorecardPage() {
           <p className="text-slate-400 font-medium">No profile data available</p>
         </div>
       )}
+      </div>
     </div>
   );
 }
