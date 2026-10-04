@@ -48,14 +48,14 @@ interface Stats {
 }
 
 export default function RecruiterDashboard() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [stats, setStats] = useState<Stats>({ totalJobs: 0, publishedJobs: 0, draftJobs: 0, closedJobs: 0, avgMatch: 0, totalApplicants: 0, acceptedApplicants: 0, timeSavedHours: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!token || user?.role !== "recruiter") {
+    if (!user || user?.role !== "recruiter") {
       setIsLoading(false);
       return;
     }
@@ -63,9 +63,9 @@ export default function RecruiterDashboard() {
     const fetchData = async () => {
       try {
         const [jobList, activityData, adminStats] = await Promise.all([
-          api.jobs.listByRecruiter(token),
-          api.jobs.listActivity(token),
-          api.admin.getStats(token)
+          api.jobs.listByRecruiter(),
+          api.jobs.listActivity(),
+          api.admin.getStats()
         ]);
 
         setJobs(jobList.jobs);
@@ -89,7 +89,7 @@ export default function RecruiterDashboard() {
     };
 
     fetchData();
-  }, [token, user?.role]);
+  }, [user]);
 
   if (isLoading) {
     return (

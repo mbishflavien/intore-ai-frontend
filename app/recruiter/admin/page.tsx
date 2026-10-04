@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "../../../lib/api";
+import { useAuth } from "@/lib/auth-context";
 import type { ActivityLog, SystemHealth } from "@/lib/types";
 import { Users, Briefcase, Clock, CheckCircle2 } from "lucide-react";
 
@@ -69,22 +70,21 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const { user, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
-    if (!token) {
+    if (authLoading) return;
+    if (!user) {
       setLoading(false);
       return;
     }
 
-    const activeToken = token;
-
     async function fetchData() {
       try {
         const [statsData, healthData, activityData] = await Promise.all([
-          api.admin.getStats(activeToken).catch(() => null),
+          api.admin.getStats().catch(() => null),
           api.admin.getSystemHealth().catch(() => null),
-          api.admin.getActivityLogs(activeToken).catch(() => ({ activities: [] as ActivityLog[] })),
+          api.admin.getActivityLogs().catch(() => ({ activities: [] as ActivityLog[] })),
         ]);
 
         if (statsData) setStats(statsData);
@@ -98,7 +98,7 @@ export default function AdminPage() {
     }
 
     fetchData();
-  }, [token]);
+  }, [user, authLoading]);
 
   if (loading) {
     return (

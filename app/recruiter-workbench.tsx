@@ -53,7 +53,8 @@ type JobFormState = {
   };
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+// Same-origin: middleware.ts proxies /api/* to the backend with the session cookie.
+const apiBaseUrl = "";
 
 const defaultJob: JobFormState = {
   title: "AI HR Product Engineer",

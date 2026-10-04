@@ -58,7 +58,7 @@ interface Profile {
 }
 
 export default function ViewProfilePage() {
-  const { token, user, isLoading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,17 +66,17 @@ export default function ViewProfilePage() {
 
   useEffect(() => {
     const loadProfile = async () => {
-      // Auth restores the token from storage after first render; wait for it.
+      // Auth restores the user from storage after first render; wait for it.
       if (authLoading) return;
       setError(null);
-      if (!token) {
+      if (!user) {
         setIsLoading(false);
         setError("Please log in to view your profile");
         return;
       }
 
       try {
-        const { profile: savedProfile } = await api.profiles.get(token);
+        const { profile: savedProfile } = await api.profiles.get();
         setProfile({
           firstName: savedProfile.firstName,
           lastName: savedProfile.lastName,
@@ -101,7 +101,7 @@ export default function ViewProfilePage() {
     };
 
     loadProfile();
-  }, [token, authLoading]);
+  }, [user, authLoading]);
 
   if (isLoading) {
     return (

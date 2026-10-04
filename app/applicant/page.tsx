@@ -41,18 +41,18 @@ function getJobTitle(jobId: string, jobs: Job[]): string {
 }
 
 export default function ApplicantDashboard() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [stats, setStats] = useState({ total: 0, pending: 0, completed: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     const fetchApps = async () => {
       try {
-        const { applications: appList } = await api.applications.list(token);
+        const { applications: appList } = await api.applications.list();
         setApplications(appList);
         setStats({
           total: appList.length,
@@ -67,7 +67,7 @@ export default function ApplicantDashboard() {
     };
 
     fetchApps();
-  }, [token]);
+  }, [user]);
 
   useEffect(() => {
     const fetchJobs = async () => {

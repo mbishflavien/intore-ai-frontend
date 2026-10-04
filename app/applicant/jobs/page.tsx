@@ -22,7 +22,7 @@ import { getSavedJobIds, toggleSavedJob } from "@/lib/saved-jobs";
 import { JobListSkeleton } from "@/components/ui";
 
 export default function JobsPage() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [jobs, setJobs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");

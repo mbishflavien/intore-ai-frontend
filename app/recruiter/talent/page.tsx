@@ -19,13 +19,13 @@ import { api } from "@/lib/api";
 import { TableSkeleton } from "@/components/ui";
 
 export default function TalentPoolPage() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [candidates, setCandidates] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    if (!token || user?.role !== "recruiter") {
+    if (!user || user?.role !== "recruiter") {
       setIsLoading(false);
       return;
     }
@@ -33,8 +33,8 @@ export default function TalentPoolPage() {
     const fetchTalent = async () => {
       try {
         // We'll aggregate talent from all missions
-        const { jobs } = await api.jobs.listByRecruiter(token);
-        const allAppsPromises = jobs.map(j => api.jobs.getApplications(j.id, token));
+        const { jobs } = await api.jobs.listByRecruiter();
+        const allAppsPromises = jobs.map(j => api.jobs.getApplications(j.id));
         const allAppsResults = await Promise.all(allAppsPromises);
         
         const uniqueTalent = new Map();
@@ -55,7 +55,7 @@ export default function TalentPoolPage() {
     };
 
     fetchTalent();
-  }, [token, user?.role]);
+  }, [user]);
 
   const filteredCandidates = candidates.filter(c => 
     `${c.profile.firstName} ${c.profile.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||

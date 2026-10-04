@@ -21,7 +21,7 @@ function formatType(type: string) {
 }
 
 export default function NotificationsCenterPage() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,9 +30,9 @@ export default function NotificationsCenterPage() {
   const [acting, setActing] = useState(false);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     let cancelled = false;
-    api.notifications.list(token)
+    api.notifications.list()
       .then(({ notifications: list }) => {
         if (!cancelled) setNotifications(list);
       })
@@ -45,7 +45,7 @@ export default function NotificationsCenterPage() {
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [user]);
 
   const unreadCount = useMemo(() => notifications.filter((n) => !n.isRead).length, [notifications]);
 
@@ -57,12 +57,12 @@ export default function NotificationsCenterPage() {
   }, [notifications, filter]);
 
   const markOne = async (id: string) => {
-    if (!token) return;
+    if (!user) return;
     setActing(true);
     const prev = notifications;
     setNotifications((cur) => cur.map((n) => (n.id === id ? { ...n, isRead: true } : n)));
     try {
-      await api.notifications.markOne(id, token);
+      await api.notifications.markOne(id);
     } catch (e) {
       setNotifications(prev);
       setError(e instanceof Error ? e.message : "Failed to mark as read");
@@ -72,12 +72,12 @@ export default function NotificationsCenterPage() {
   };
 
   const markAll = async () => {
-    if (!token || unreadCount === 0) return;
+    if (!user || unreadCount === 0) return;
     setActing(true);
     const prev = notifications;
     setNotifications((cur) => cur.map((n) => ({ ...n, isRead: true })));
     try {
-      await api.notifications.readAll(token);
+      await api.notifications.readAll();
     } catch (e) {
       setNotifications(prev);
       setError(e instanceof Error ? e.message : "Failed to mark all as read");

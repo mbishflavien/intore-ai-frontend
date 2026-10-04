@@ -26,7 +26,7 @@ interface Evaluation {
 export default function PracticePage() {
   const params = useParams();
   const challengeId = (params.challengeId as string) ?? "";
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [challenge, setChallenge] = useState<ProofChallenge | null>(null);
   const [code, setCode] = useState("");
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
@@ -36,22 +36,22 @@ export default function PracticePage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     api.training
-      .getPracticeChallenge(challengeId, token)
+      .getPracticeChallenge(challengeId)
       .then(({ challenge: data }) => {
         setChallenge(data);
         setCode(data.type === "sql" ? data.starterQuery ?? "" : data.starterCode ?? "");
       })
       .catch((error) => setMessage(error instanceof Error ? error.message : "Failed to load challenge"));
-  }, [challengeId, token]);
+  }, [challengeId, user]);
 
   const evaluate = async () => {
-    if (!token) return;
+    if (!user) return;
     setIsEvaluating(true);
     setMessage("");
     try {
-      const { evaluation: result } = await api.training.practiceEvaluate(challengeId, code, token);
+      const { evaluation: result } = await api.training.practiceEvaluate(challengeId, code);
       setEvaluation(result);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Failed to evaluate.");
@@ -60,7 +60,7 @@ export default function PracticePage() {
     }
   };
 
-  if (!token) {
+  if (!user) {
     return (
       <div className="glass-card p-16 text-center space-y-4">
         <CirclePlay className="w-12 h-12 text-emerald-500 mx-auto" />

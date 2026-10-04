@@ -25,7 +25,7 @@ export default function MentorPage() {
 function MentorInner() {
   const searchParams = useSearchParams();
   const skillParam = searchParams.get("skill");
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [modules, setModules] = useState<TrainingModule[]>([]);
   const [skill, setSkill] = useState<string>(skillParam ?? "");
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -64,7 +64,7 @@ function MentorInner() {
 
   const send = async (message: string) => {
     const text = message.trim();
-    if (!text || !token || isThinking) return;
+    if (!text || !user || isThinking) return;
 
     setTurns((current) => [...current, { id: crypto.randomUUID(), role: "user", content: text }]);
     setInput("");
@@ -72,7 +72,7 @@ function MentorInner() {
     setIsThinking(true);
 
     try {
-      const response = await api.mentor.chat({ skill: skill || undefined, message: text, sessionId: sessionId ?? undefined }, token);
+      const response = await api.mentor.chat({ skill: skill || undefined, message: text, sessionId: sessionId ?? undefined });
       applyResponse(response);
     } catch (error) {
       setTurns((current) => [
@@ -96,7 +96,7 @@ function MentorInner() {
     setQuiz(response.quiz);
   };
 
-  if (!token) {
+  if (!user) {
     return (
       <div className="glass-card p-16 text-center space-y-4">
         <Bot className="w-12 h-12 text-sky-500 mx-auto" />
