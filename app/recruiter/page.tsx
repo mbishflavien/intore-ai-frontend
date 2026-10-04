@@ -108,7 +108,7 @@ export default function RecruiterDashboard() {
       {/* Header Section */}
       <section className="animate-fade-in">
         <h1 className="font-display text-4xl font-bold text-on-surface tracking-tight mb-2">
-          Good Morning, {user?.email?.split("@")[0]}
+          {greeting()}, {user?.firstName || user?.email?.split("@")[0]}
         </h1>
         <p className="text-slate-500 text-lg">
           You have {stats.publishedJobs} active job postings.
@@ -205,7 +205,8 @@ export default function RecruiterDashboard() {
           </div>
 
           <div className="glass-card p-6 min-h-[500px] relative">
-            <div className="dna-line opacity-20"></div>
+            {/* Runs under the item icons (card padding + half an icon), not through the text. */}
+            <div className="dna-line opacity-20" style={{ left: "2.5rem" }}></div>
             <div className="space-y-8 relative z-10">
               {activities.length === 0 ? (
                 <p className="text-sm text-slate-400">No recent activity yet.</p>
@@ -230,6 +231,13 @@ export default function RecruiterDashboard() {
       </div>
     </div>
   );
+}
+
+function greeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
 }
 
 function MetricCard({ title, value, trend, icon: Icon, color, delay }: any) {
