@@ -115,14 +115,14 @@ export default function RecruiterLayout({
   return (
     <div className="min-h-screen bg-aura-gradient">
       {/* Top Glass Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center max-w-7xl mx-auto bg-white/40 backdrop-blur-2xl rounded-2xl mt-4 mx-4 px-4 py-3 border border-white/20 shadow-[0_20px_50px_rgba(56,189,248,0.1)] sm:mx-6 sm:px-6 dark:bg-slate-900/60 dark:border-white/10">
+      <header className="fixed top-4 inset-x-4 z-50 flex justify-between items-center bg-white/40 backdrop-blur-2xl rounded-2xl px-4 py-3 border border-white/20 shadow-[0_20px_50px_rgba(56,189,248,0.1)] sm:inset-x-6 sm:px-6">
         <div className="flex items-center gap-2 sm:gap-4">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
             aria-expanded={mobileOpen}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 text-slate-500 transition-all hover:bg-white/20 lg:hidden dark:text-slate-300"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 text-slate-500 transition-all hover:bg-white/20 lg:hidden"
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -226,7 +226,7 @@ export default function RecruiterLayout({
             href="/recruiter/jobs/new"
             aria-label="Create new job"
             title="Create new job"
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-sky-400/30 text-sky-500 shadow-sm transition-colors hover:bg-sky-50 dark:hover:bg-white/10"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-sky-400/30 text-sky-500 shadow-sm transition-colors hover:bg-sky-50"
           >
             <Plus className="h-6 w-6" />
           </Link>

@@ -18,13 +18,13 @@ export function Skeleton({ className = "", lines = 0 }: SkeletonProps) {
         {Array.from({ length: lines }).map((_, i) => (
           <div
             key={i}
-            className={`h-4 animate-pulse rounded-lg bg-slate-200/70 dark:bg-slate-700/60 ${lineWidths[i % lineWidths.length]}`}
+            className={`h-4 animate-pulse rounded-lg bg-slate-200/70 ${lineWidths[i % lineWidths.length]}`}
           />
         ))}
       </div>
     );
   }
-  return <div aria-hidden="true" className={`animate-pulse rounded-2xl bg-slate-200/70 dark:bg-slate-700/60 ${className}`.trim()} />;
+  return <div aria-hidden="true" className={`animate-pulse rounded-2xl bg-slate-200/70 ${className}`.trim()} />;
 }
 
 export function JobListSkeleton() {
@@ -91,10 +91,10 @@ export function DashboardSkeleton() {
 export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
     <div className="glass-card overflow-hidden" aria-label="Loading list">
-      <div className="border-b border-white/60 p-4 dark:border-white/10">
+      <div className="border-b border-white/60 p-4">
         <Skeleton className="h-5 w-1/4" />
       </div>
-      <div className="divide-y divide-white/40 dark:divide-white/10">
+      <div className="divide-y divide-white/40">
         {Array.from({ length: rows }).map((_, i) => (
           <div key={i} className="flex items-center gap-4 p-4">
             <Skeleton className="h-10 w-10 rounded-full" />

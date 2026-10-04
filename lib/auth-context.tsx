@@ -40,7 +40,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (storedToken) {
         setToken(storedToken);
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch {
+            localStorage.removeItem(USER_KEY);
+          }
         }
 
         try {
@@ -49,9 +53,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(freshUser);
           localStorage.setItem(USER_KEY, JSON.stringify(freshUser));
         } catch (err) {
-          console.error("Failed to refresh user session:", err);
-          // If the token is invalid, we might want to logout
-          // but for now we'll just keep the stored user if any
+          // A rejected token (expired, or signed with a rotated secret) would otherwise
+          // leave every page silently empty; drop it so the layouts send users to /login.
+          // Network failures keep the stored session.
+          if ((err as { status?: number }).status === 401) {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            setToken(null);
+            setUser(null);
+          } else {
+            console.error("Failed to refresh user session:", err);
+          }
         }
       }
       setIsLoading(false);

@@ -73,7 +73,6 @@ export default function ApplicantDashboard() {
     const fetchJobs = async () => {
       try {
         const { jobs: jobList } = await api.jobs.list();
-        console.log("Jobs fetched:", jobList);
         setJobs(jobList);
       } catch (err) {
         console.error("Failed to fetch jobs:", err);
@@ -206,7 +205,7 @@ export default function ApplicantDashboard() {
                 <p className="text-xs text-slate-500">Check back later for new opportunities.</p>
               </div>
             ) : (
-              jobs.map((job) => (
+              jobs.slice(0, 5).map((job) => (
                 <Link key={job.id} href={`/applicant/jobs/${job.id}`} className="glass-card p-4 hover:border-sky-200 transition-all block group">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="text-sm font-bold text-on-surface leading-tight group-hover:text-sky-600 transition-colors">{job.title}</h4>

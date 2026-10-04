@@ -42,10 +42,13 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     ...fetchOptions,
     headers,
   });
-  const data = await response.json();
+  // Proxies (e.g. a waking Render instance) can answer with HTML instead of JSON.
+  const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(data.error || `Request failed with status ${response.status}`);
+    const error = new Error(data.error || `Request failed with status ${response.status}`) as Error & { status?: number };
+    error.status = response.status;
+    throw error;
   }
 
   return data;
