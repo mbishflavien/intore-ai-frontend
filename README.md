@@ -32,7 +32,8 @@ npm run dev    # Web on http://localhost:3000
 Copy `.env.example` to `.env.local` and set:
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+API_ORIGIN=http://localhost:4000                         # backend; /api/* is proxied here
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA  # Cloudflare test key (always passes)
 ```
 
 ## Backend

@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { api, type ApiError } from "./api";
 
 interface User {
   id: string;
@@ -10,113 +11,93 @@ interface User {
   email: string;
   role: "applicant" | "recruiter";
   createdAt: string;
+  mfaEnabled?: boolean;
 }
+
+type Role = "applicant" | "recruiter";
+
+/** "signed-in" or "mfa" (password accepted, authenticator code still needed). */
+export type LoginOutcome = { status: "signed-in"; user: User } | { status: "mfa" };
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   isLoading: boolean;
-  login: (emailOrUsername: string, password: string, role?: "applicant" | "recruiter") => Promise<void>;
-  register: (username: string, firstName: string, lastName: string, email: string, password: string, role: "applicant" | "recruiter") => Promise<void>;
-  logout: () => void;
+  login: (emailOrUsername: string, password: string, options?: { role?: Role; captchaToken?: string }) => Promise<LoginOutcome>;
+  verifyOtp: (code: string, role?: Role) => Promise<User>;
+  register: (
+    details: { username: string; firstName: string; lastName: string; email: string; password: string; role: Role; captchaToken?: string },
+  ) => Promise<void>;
+  logout: () => Promise<void>;
   updateUser: (updatedUser: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const TOKEN_KEY = "umurava_token";
-const USER_KEY = "umurava_user";
+// Pre-cookie builds kept a bearer token here; scrub it so nothing XSS-readable lingers.
+const LEGACY_KEYS = ["umurava_token", "umurava_user", "token"];
 
+/**
+ * Session state lives in an HttpOnly cookie that JavaScript can't read. The client only
+ * keeps the user profile in memory and asks the server (`/auth/me`) who is signed in.
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const initAuth = async () => {
-      const storedToken = localStorage.getItem(TOKEN_KEY);
-      const storedUser = localStorage.getItem(USER_KEY);
-
-      if (storedToken) {
-        setToken(storedToken);
-        if (storedUser) {
-          try {
-            setUser(JSON.parse(storedUser));
-          } catch {
-            localStorage.removeItem(USER_KEY);
-          }
-        }
-
-        try {
-          const { api } = await import("./api");
-          const { user: freshUser } = await api.auth.me(storedToken);
-          setUser(freshUser);
-          localStorage.setItem(USER_KEY, JSON.stringify(freshUser));
-        } catch (err) {
-          // A rejected token (expired, or signed with a rotated secret) would otherwise
-          // leave every page silently empty; drop it so the layouts send users to /login.
-          // Network failures keep the stored session.
-          if ((err as { status?: number }).status === 401) {
-            localStorage.removeItem(TOKEN_KEY);
-            localStorage.removeItem(USER_KEY);
-            setToken(null);
-            setUser(null);
-          } else {
-            console.error("Failed to refresh user session:", err);
-          }
-        }
-      }
-      setIsLoading(false);
-    };
-
-    initAuth();
-  }, []);
-
-  const login = useCallback(async (emailOrUsername: string, password: string, role?: "applicant" | "recruiter") => {
-    const { api } = await import("./api");
-    const response = await api.auth.login({ emailOrUsername, password });
-    
-    if (role && response.user.role !== role) {
-      throw new Error(`This account is registered as an ${response.user.role}. Please login as ${response.user.role} or create a new ${role} account.`);
+    try {
+      LEGACY_KEYS.forEach((key) => localStorage.removeItem(key));
+    } catch {
+      // storage blocked — nothing to scrub
     }
-
-    localStorage.setItem(TOKEN_KEY, response.token);
-    localStorage.setItem(USER_KEY, JSON.stringify(response.user));
-    
-    setToken(response.token);
-    setUser(response.user);
+    api.auth
+      .me()
+      .then(({ user: current }) => setUser(current as User))
+      .catch((err: ApiError) => {
+        if (err.status !== 401) console.error("Failed to restore session:", err);
+        setUser(null);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const register = useCallback(async (username: string, firstName: string, lastName: string, email: string, password: string, role: "applicant" | "recruiter") => {
-    const { api } = await import("./api");
-    const response = await api.auth.register({ username, firstName, lastName, email, password, role });
-    
-    localStorage.setItem(TOKEN_KEY, response.token);
-    localStorage.setItem(USER_KEY, JSON.stringify(response.user));
-    
-    setToken(response.token);
-    setUser(response.user);
+  /** The role picker is a convenience; a mismatched role ends the session it just opened. */
+  const acceptUser = useCallback(async (signedIn: User, role?: Role) => {
+    if (role && signedIn.role !== role) {
+      await api.auth.logout().catch(() => undefined);
+      throw new Error(`This account is registered as an ${signedIn.role}. Please login as ${signedIn.role} or create a new ${role} account.`);
+    }
+    setUser(signedIn);
+    return signedIn;
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    setToken(null);
+  const login = useCallback<AuthContextType["login"]>(async (emailOrUsername, password, options = {}) => {
+    const result = await api.auth.login({ emailOrUsername, password, captchaToken: options.captchaToken });
+    if (result.mfaRequired) return { status: "mfa" };
+    return { status: "signed-in", user: await acceptUser(result.user as User, options.role) };
+  }, [acceptUser]);
+
+  const verifyOtp = useCallback<AuthContextType["verifyOtp"]>(async (code, role) => {
+    const { user: signedIn } = await api.auth.verifyOtp(code);
+    return acceptUser(signedIn as User, role);
+  }, [acceptUser]);
+
+  const register = useCallback<AuthContextType["register"]>(async (details) => {
+    const { user: created } = await api.auth.register(details);
+    setUser(created as User);
+  }, []);
+
+  const logout = useCallback(async () => {
+    await api.auth.logout().catch(() => undefined);
     setUser(null);
     window.location.assign("/login");
   }, []);
 
   const updateUser = useCallback((updatedUser: Partial<User>) => {
-    setUser((prev) => {
-      if (!prev) return null;
-      const newUser = { ...prev, ...updatedUser };
-      localStorage.setItem(USER_KEY, JSON.stringify(newUser));
-      return newUser;
-    });
+    setUser((prev) => (prev ? { ...prev, ...updatedUser } : null));
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, isLoading, login, verifyOtp, register, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -71,7 +71,7 @@ export default function ValidationEnginePage() {
   const params = useParams();
   const router = useRouter();
   const jobId = params.id as string;
-  const { token } = useAuth();
+  const { user } = useAuth();
   
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -90,9 +90,9 @@ export default function ValidationEnginePage() {
 
   useEffect(() => {
     const fetchApplications = async () => {
-      if (!token) return;
+      if (!user) return;
       try {
-        const { applications: apps } = await api.jobs.getApplications(jobId, token);
+        const { applications: apps } = await api.jobs.getApplications(jobId);
         setApplications(apps);
       } catch (err) {
         console.error("Failed to fetch applications:", err);
@@ -102,14 +102,14 @@ export default function ValidationEnginePage() {
     };
 
     fetchApplications();
-  }, [jobId, token]);
+  }, [jobId, user]);
 
   const handleScreen = async () => {
-    if (!token) return;
+    if (!user) return;
     setIsScreening(true);
     try {
-      await api.jobs.screen(jobId, token);
-      const { applications: apps } = await api.jobs.getApplications(jobId, token);
+      await api.jobs.screen(jobId);
+      const { applications: apps } = await api.jobs.getApplications(jobId);
       setApplications(apps);
     } catch (err) {
       console.error("Screening failed:", err);
@@ -119,7 +119,7 @@ export default function ValidationEnginePage() {
   };
 
   const handleUpdateStatus = async (applicationId: string, newStatus: string) => {
-    if (!token) {
+    if (!user) {
       console.error("No token");
       return;
     }
@@ -131,10 +131,10 @@ export default function ValidationEnginePage() {
     }
     console.log("Updating application:", applicationId, "to status:", newStatus);
     try {
-      await api.applications.updateStatus(applicationId, newStatus as ApplicationStatus, token);
+      await api.applications.updateStatus(applicationId, newStatus as ApplicationStatus);
       console.log("Status updated successfully");
       // Refetch applications from API to get fresh data
-      const { applications: freshApps } = await api.jobs.getApplications(jobId, token);
+      const { applications: freshApps } = await api.jobs.getApplications(jobId);
       setApplications(freshApps);
       console.log("Refetched applications, new status should be:", newStatus);
     } catch (err) {
@@ -143,7 +143,7 @@ export default function ValidationEnginePage() {
   };
 
   const handleScheduleInterview = async () => {
-    if (!token || !selectedCandidate) return;
+    if (!user || !selectedCandidate) return;
     
     const application = applications.find(a => a.applicantId === selectedCandidate.applicantId);
     if (!application) {
@@ -168,7 +168,7 @@ export default function ValidationEnginePage() {
         type: scheduleForm.type,
         meetingLink: scheduleForm.meetingLink || undefined,
         notes: scheduleForm.notes || undefined,
-      }, token);
+      });
       
       alert("Interview scheduled successfully! The candidate has been notified.");
       setShowScheduleModal(false);

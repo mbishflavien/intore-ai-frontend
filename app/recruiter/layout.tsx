@@ -17,6 +17,7 @@ import {
   LogOut,
   Clock,
   Menu,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -31,7 +32,7 @@ export default function RecruiterLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout, isLoading, token } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -39,9 +40,9 @@ export default function RecruiterLayout({
   const { collapsed, toggleCollapsed, mobileOpen, setMobileOpen } = useSidebar();
 
   const fetchNotifications = async () => {
-    if (!token) return;
+    if (!user) return;
     try {
-      const data = await api.notifications.listUnread(token);
+      const data = await api.notifications.listUnread();
       setUnreadCount(data.unreadCount);
       setNotifications(data.notifications);
     } catch (err) {
@@ -64,12 +65,12 @@ export default function RecruiterLayout({
 
   // Fetch notifications on mount and poll every 30 seconds
   useEffect(() => {
-    if (!token || user?.role !== "recruiter") return;
+    if (!user || user?.role !== "recruiter") return;
     
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
-  }, [token, user?.role]);
+  }, [user]);
 
   // Handle click outside notifications
   useEffect(() => {
@@ -86,9 +87,9 @@ export default function RecruiterLayout({
     const nextState = !isNotificationsOpen;
     setIsNotificationsOpen(nextState);
 
-    if (nextState && unreadCount > 0 && token) {
+    if (nextState && unreadCount > 0 && user) {
       try {
-        await api.notifications.markRecruiterFeedRead(token);
+        await api.notifications.markRecruiterFeedRead();
         setUnreadCount(0);
       } catch (err) {
         console.error("Failed to mark notifications as read:", err);
@@ -110,6 +111,7 @@ export default function RecruiterLayout({
     { icon: Users, href: "/recruiter/talent", label: "Talent Pool" },
     { icon: FolderHeart, href: "/recruiter/archive", label: "Archive" },
     { icon: Lock, href: "/recruiter/admin", label: "Admin" },
+    { icon: ShieldCheck, href: "/recruiter/security", label: "Security" },
   ];
 
   return (

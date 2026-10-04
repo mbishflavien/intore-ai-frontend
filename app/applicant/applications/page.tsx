@@ -71,7 +71,7 @@ const labelClass: Record<StageState, string> = {
 };
 
 export default function ApplicationsPage() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -79,12 +79,12 @@ export default function ApplicationsPage() {
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     const fetchAll = async () => {
       try {
         const [{ applications: appList }, { notifications: notifs }] = await Promise.all([
-          api.applications.list(token),
-          api.notifications.list(token).catch(() => ({ notifications: [] as Notification[] })),
+          api.applications.list(),
+          api.notifications.list().catch(() => ({ notifications: [] as Notification[] })),
         ]);
         setApplications(appList);
         setNotifications(notifs);
@@ -95,7 +95,7 @@ export default function ApplicationsPage() {
       }
     };
     fetchAll();
-  }, [token]);
+  }, [user]);
 
   useEffect(() => {
     api.jobs

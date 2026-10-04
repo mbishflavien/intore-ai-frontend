@@ -19,6 +19,7 @@ import {
   Bot,
   ClipboardCheck,
   Menu,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -34,7 +35,7 @@ export default function ApplicantLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout, isLoading, token } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const bellRef = useRef<HTMLDivElement | null>(null);
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -57,11 +58,11 @@ export default function ApplicantLayout({
   }, [router, user, isLoading]);
 
   useEffect(() => {
-    if (!token || user?.role !== "applicant") return;
+    if (!user || user?.role !== "applicant") return;
 
     const fetchNotifications = async () => {
       try {
-        const data = await api.notifications.list(token);
+        const data = await api.notifications.list();
         setNotifications(data.notifications);
       } catch (err) {
         console.error("Failed to fetch applicant notifications:", err);
@@ -71,21 +72,21 @@ export default function ApplicantLayout({
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
-  }, [token, user?.role]);
+  }, [user]);
 
   useEffect(() => {
-    if (!token || user?.role !== "applicant") return;
+    if (!user || user?.role !== "applicant") return;
 
     const fetchProfile = async () => {
       try {
-        const { profile: p } = await api.profiles.get(token);
+        const { profile: p } = await api.profiles.get();
         if (p) setProfile(p);
       } catch (err) {
         console.error("Failed to fetch profile:", err);
       }
     };
     fetchProfile();
-  }, [token, user?.role]);
+  }, [user]);
 
   useEffect(() => {
     if (!isNotificationsOpen) return;
@@ -115,7 +116,7 @@ export default function ApplicantLayout({
     const nextOpenState = !isNotificationsOpen;
     setIsNotificationsOpen(nextOpenState);
 
-    if (!nextOpenState || unreadCount === 0 || !token) {
+    if (!nextOpenState || unreadCount === 0 || !user) {
       return;
     }
 
@@ -123,7 +124,7 @@ export default function ApplicantLayout({
     setNotifications((current) => current.map((notification) => ({ ...notification, isRead: true })));
 
     try {
-      await api.notifications.readAll(token);
+      await api.notifications.readAll();
     } catch (err) {
       console.error("Failed to mark applicant notifications as read:", err);
       setNotifications(previousNotifications);
@@ -169,6 +170,7 @@ export default function ApplicantLayout({
     { icon: Bot, href: "/applicant/mentor", label: "AI Mentor" },
     { icon: Bell, href: "/applicant/notifications", label: "Notifications" },
     { icon: User, href: "/applicant/profile", label: "My Profile" },
+    { icon: ShieldCheck, href: "/applicant/security", label: "Security" },
   ];
 
   return (

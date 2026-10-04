@@ -28,7 +28,7 @@ function levelColor(level: string): string {
 export default function ModuleDetailPage() {
   const params = useParams();
   const moduleId = (params.id as string) ?? "";
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [module, setModule] = useState<TrainingModule | null>(null);
   const [progress, setProgress] = useState<TrainingProgress[]>([]);
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
@@ -53,12 +53,12 @@ export default function ModuleDetailPage() {
   }, [moduleId]);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     api.training
-      .getProgress(token)
+      .getProgress()
       .then(({ progress: list }) => setProgress(list))
       .catch(() => undefined);
-  }, [token]);
+  }, [user]);
 
   const entry = useMemo(() => progress.find((item) => item.moduleId === module?.id), [progress, module]);
   const completedIds = new Set(entry?.completedUnitIds ?? []);
@@ -110,13 +110,13 @@ export default function ModuleDetailPage() {
   };
 
   const markComplete = async (unitId: string) => {
-    if (!token) {
+    if (!user) {
       setMessage("Sign in to track your progress.");
       return;
     }
     if (completedIds.has(unitId)) return;
     try {
-      const { progress: list } = await api.training.markUnitComplete(module.id, unitId, token);
+      const { progress: list } = await api.training.markUnitComplete(module.id, unitId);
       setProgress(list);
       setMessage("Unit marked complete. Keep going!");
       setTimeout(() => setMessage(""), 3000);

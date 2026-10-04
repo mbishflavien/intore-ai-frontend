@@ -68,7 +68,7 @@ export default function JobDetailsPage() {
   const router = useRouter();
   const params = useParams();
   const jobId = params.id as string;
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   const [job, setJob] = useState<Job | null>(null);
   const [profile, setProfile] = useState<TalentProfile | null>(null);
@@ -90,9 +90,9 @@ export default function JobDetailsPage() {
         const { job: jobData } = await api.jobs.get(jobId);
         setJob(jobData);
 
-        if (token) {
+        if (user) {
           try {
-            const { applications } = await api.applications.list(token);
+            const { applications } = await api.applications.list();
             const applied = applications.some((a: { jobId: string }) => a.jobId === jobId);
             setHasApplied(applied);
 
@@ -107,14 +107,14 @@ export default function JobDetailsPage() {
           }
 
           try {
-            const { profile: savedProfile } = await api.profiles.get(token);
+            const { profile: savedProfile } = await api.profiles.get();
             setProfile(savedProfile);
           } catch {
             console.log("No profile found");
           }
 
           try {
-            const { submission } = await api.proofhire.getSubmission(jobId, token);
+            const { submission } = await api.proofhire.getSubmission(jobId);
             setProofSubmission(submission);
           } catch {
             setProofSubmission(null);
@@ -129,12 +129,12 @@ export default function JobDetailsPage() {
     };
 
     fetchData();
-  }, [jobId, token]);
+  }, [jobId, user]);
 
   const refreshProfile = async () => {
-    if (!token) return;
+    if (!user) return;
     try {
-      const { profile: savedProfile } = await api.profiles.get(token);
+      const { profile: savedProfile } = await api.profiles.get();
       setProfile(savedProfile);
     } catch {
       console.log("No profile found");
@@ -142,7 +142,7 @@ export default function JobDetailsPage() {
   };
 
   const handleResumeUpload = async (files: FileList | null) => {
-    if (!files || files.length === 0 || !token) return;
+    if (!files || files.length === 0 || !user) return;
     const file = files[0];
     if (file.size > 5 * 1024 * 1024) {
       setError("Resume too large — please upload a file under 5MB.");
@@ -156,7 +156,7 @@ export default function JobDetailsPage() {
       const chunk = new Uint8Array(bytes);
       for (let i = 0; i < chunk.length; i++) binary += String.fromCharCode(chunk[i]);
       const base64 = btoa(binary);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000"}/api/profiles/parse`, {
+      const response = await fetch(`/api/profiles/parse`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mimeType: file.type || "application/pdf", base64 }),
@@ -169,7 +169,7 @@ export default function JobDetailsPage() {
         resumeFileName: file.name,
         resumeUploadedAt: new Date().toISOString(),
       };
-      const { profile: saved } = await api.profiles.save(stamped, token);
+      const { profile: saved } = await api.profiles.save(stamped);
       setProfile(saved);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to upload resume");
@@ -179,7 +179,7 @@ export default function JobDetailsPage() {
   };
 
   const handleApply = async () => {
-    if (!token || !profile) {
+    if (!user || !profile) {
       router.push("/applicant/profile");
       return;
     }
@@ -194,7 +194,7 @@ export default function JobDetailsPage() {
     setError("");
 
     try {
-      await api.applications.create({ jobId, profile }, token);
+      await api.applications.create({ jobId, profile });
       setHasApplied(true);
       setWizardStep(3);
     } catch (err) {
