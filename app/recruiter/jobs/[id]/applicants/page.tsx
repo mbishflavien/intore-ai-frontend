@@ -21,7 +21,8 @@ import {
   Video,
   Phone,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  Download,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -190,6 +191,36 @@ export default function ValidationEnginePage() {
 
   const shortlist = applications[0]?.screeningResult?.shortlisted || [];
   const selectedCandidate = shortlist.find(c => c.applicantId === selectedCandidateId) || shortlist[0];
+
+  const handleExportBulkCSV = () => {
+    const rows = [
+      ["Name", "Email", "Headline", "Total Score", "Skills", "Experience", "Education", "Relevance", "Proof Score", "Status", "Applied At"],
+      ...applications.map((app) => {
+        const ranked = shortlist.find((s) => s.applicantId === app.applicantId);
+        return [
+          `${app.profile.firstName} ${app.profile.lastName}`,
+          app.profile.email ?? "",
+          app.profile.headline ?? "",
+          ranked ? `${ranked.score.total}%` : "",
+          ranked ? `${ranked.score.skills}%` : "",
+          ranked ? `${ranked.score.experience}%` : "",
+          ranked ? `${ranked.score.education}%` : "",
+          ranked ? `${ranked.score.relevance}%` : "",
+          `${app.proofScore ?? 0}%`,
+          app.status,
+          new Date(app.appliedAt).toLocaleDateString(),
+        ];
+      }),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `applicants-${jobId}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   if (isLoading) {
     return (
@@ -425,8 +456,11 @@ export default function ValidationEnginePage() {
                 >
                   Schedule Interview
                 </button>
-                <button className="px-8 py-4 bg-white/60 border border-white text-slate-600 rounded-2xl font-bold hover:bg-white/80 transition-all">
-                  Export PDF Report
+                <button
+                  onClick={handleExportBulkCSV}
+                  className="px-8 py-4 bg-white/60 border border-white text-slate-600 rounded-2xl font-bold hover:bg-white/80 transition-all flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" /> Export CSV
                 </button>
               </div>
             </div>

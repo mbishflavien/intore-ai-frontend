@@ -17,7 +17,10 @@ import {
   MapPin,
   Award,
   Users,
-  ChevronRight
+  ChevronRight,
+  BookOpen,
+  Copy,
+  Check,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -38,6 +41,7 @@ interface Job {
     mode: "required" | "optional";
     challengeId?: string;
   };
+  prepMode?: boolean;
   status: string;
   createdAt: string;
 }
@@ -50,6 +54,8 @@ export default function RecruiterJobDetailsPage() {
   const [job, setJob] = useState<Job | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isPrepToggling, setIsPrepToggling] = useState(false);
+  const [prepLinkCopied, setPrepLinkCopied] = useState(false);
   const [message, setMessage] = useState<{ text: string, type: "success" | "error" } | null>(null);
 
   useEffect(() => {
@@ -107,6 +113,27 @@ export default function RecruiterJobDetailsPage() {
       setMessage({ text: "Failed to delete job", type: "error" });
       setIsUpdating(false);
     }
+  };
+
+  const handlePrepToggle = async () => {
+    if (!job || !token) return;
+    setIsPrepToggling(true);
+    try {
+      const { job: updated } = await api.jobs.update(job!.id, { prepMode: !job!.prepMode } as any, token!);
+      setJob(updated as any);
+      setMessage({ text: `Prep mode ${!job!.prepMode ? "enabled" : "disabled"}.`, type: "success" });
+    } catch {
+      setMessage({ text: "Failed to update prep mode.", type: "error" });
+    } finally {
+      setIsPrepToggling(false);
+    }
+  };
+
+  const handleCopyPrepLink = () => {
+    const url = `${window.location.origin}/prep/${job?.id}`;
+    navigator.clipboard.writeText(url);
+    setPrepLinkCopied(true);
+    setTimeout(() => setPrepLinkCopied(false), 2000);
   };
 
   if (isLoading) {
@@ -306,6 +333,46 @@ export default function RecruiterJobDetailsPage() {
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Protocol ID</span>
                 <p className="font-mono text-[10px] text-sky-600 mt-1 truncate">{job.proofHire.challengeId}</p>
               </div>
+            )}
+          </section>
+
+          {/* Prep Mode Card */}
+          <section className={`glass-card p-6 border-l-4 ${job.prepMode ? "border-l-amber-400" : "border-l-slate-200"}`}>
+            <div className="flex items-center justify-between mb-4">
+              <div className={`p-2 rounded-xl ${job.prepMode ? "bg-amber-50 text-amber-500" : "bg-slate-50 text-slate-400"}`}>
+                <BookOpen className="w-6 h-6" />
+              </div>
+              <button
+                onClick={handlePrepToggle}
+                disabled={isPrepToggling}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-50 ${
+                  job.prepMode ? "bg-amber-400" : "bg-slate-200"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform ${
+                    job.prepMode ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+            <h3 className="font-display font-black text-on-surface mb-1">Candidate Prep</h3>
+            <p className="text-xs text-slate-500 leading-relaxed mb-4">
+              {job.prepMode
+                ? "Prep mode is active. Share the link below with candidates."
+                : "Enable to give candidates a shareable prep guide for this role."}
+            </p>
+            {job.prepMode && (
+              <button
+                onClick={handleCopyPrepLink}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-50 border border-amber-100 text-amber-700 rounded-2xl text-xs font-bold hover:bg-amber-100 transition-colors"
+              >
+                {prepLinkCopied ? (
+                  <><Check className="w-3.5 h-3.5" /> Copied!</>
+                ) : (
+                  <><Copy className="w-3.5 h-3.5" /> Copy Prep Link</>
+                )}
+              </button>
             )}
           </section>
 
