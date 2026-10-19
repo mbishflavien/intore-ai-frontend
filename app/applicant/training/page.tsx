@@ -28,7 +28,7 @@ function levelColor(level: string): string {
 }
 
 export default function TrainingPage() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [modules, setModules] = useState<TrainingModule[]>([]);
   const [recommendations, setRecommendations] = useState<TrainingRecommendation[]>([]);
   const [progress, setProgress] = useState<TrainingProgress[]>([]);
@@ -51,13 +51,13 @@ export default function TrainingPage() {
   }, []);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     const fetchPrivate = async () => {
       try {
         const [progressRes, recRes, practiceRes] = await Promise.all([
-          api.training.getProgress(token),
-          api.training.getRecommendations(token),
-          api.training.listPracticeChallenges(token),
+          api.training.getProgress(),
+          api.training.getRecommendations(),
+          api.training.listPracticeChallenges(),
         ]);
         setProgress(progressRes.progress);
         setRecommendations(recRes.recommendations);
@@ -67,7 +67,7 @@ export default function TrainingPage() {
       }
     };
     fetchPrivate();
-  }, [token]);
+  }, [user]);
 
   const moduleProgress = useMemo(() => {
     const map = new Map<string, TrainingProgress>();
@@ -97,7 +97,7 @@ export default function TrainingPage() {
     );
   }
 
-  if (!token) {
+  if (!user) {
     return (
       <div className="glass-card p-16 text-center space-y-4">
         <GraduationCap className="w-12 h-12 text-sky-500 mx-auto" />

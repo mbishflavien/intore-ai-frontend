@@ -28,21 +28,21 @@ interface Job {
 }
 
 export default function JobsPage() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
 
   useEffect(() => {
-    if (!token || user?.role !== "recruiter") {
+    if (!user || user?.role !== "recruiter") {
       setIsLoading(false);
       return;
     }
 
     const fetchJobs = async () => {
       try {
-        const { jobs: jobList } = await api.jobs.listByRecruiter(token);
+        const { jobs: jobList } = await api.jobs.listByRecruiter();
         setJobs(jobList);
       } catch (err) {
         console.error("Failed to fetch missions:", err);
@@ -52,7 +52,7 @@ export default function JobsPage() {
     };
 
     fetchJobs();
-  }, [token, user?.role]);
+  }, [user]);
 
   const statusMap: Record<string, string> = {
     "Active": "published",

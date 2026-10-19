@@ -26,7 +26,7 @@ import { checkProfileCompleteness } from "@/lib/profile";
 const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 
 export default function ApplicantProfilePage() {
-  const { token, updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<TalentProfile | null>(null);
   const [isParsing, setIsParsing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -37,10 +37,10 @@ export default function ApplicantProfilePage() {
   const completeness = checkProfileCompleteness(profile);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     const fetchProfile = async () => {
       try {
-        const { profile: p } = await api.profiles.get(token);
+        const { profile: p } = await api.profiles.get();
         setProfile(p);
       } catch (err: any) {
         console.error("Failed to fetch profile:", err?.message || err);
@@ -48,10 +48,10 @@ export default function ApplicantProfilePage() {
       }
     };
     fetchProfile();
-  }, [token]);
+  }, [user]);
 
   const handleFileUpload = async (files: FileList | null) => {
-    if (!files || files.length === 0 || !token) return;
+    if (!files || files.length === 0 || !user) return;
     const file = files[0];
     if (file.size > MAX_RESUME_BYTES) {
       setStatus("Resume too large — please upload a file under 5MB.");
@@ -64,7 +64,7 @@ export default function ApplicantProfilePage() {
       const bytes = await file.arrayBuffer();
       const base64 = arrayBufferToBase64(bytes);
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000"}/api/profiles/parse`, {
+      const response = await fetch(`/api/profiles/parse`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mimeType: file.type || "application/pdf", base64 }),
@@ -84,7 +84,7 @@ export default function ApplicantProfilePage() {
   };
 
   const handleSave = async () => {
-    if (!profile || !token) return;
+    if (!profile || !user) return;
     setIsSaving(true);
     try {
       const stamped: TalentProfile = {
@@ -93,7 +93,7 @@ export default function ApplicantProfilePage() {
         resumeFileName: resumeFile ? resumeFile.name : profile.resumeFileName,
         resumeUploadedAt: resumeFile ? new Date().toISOString() : profile.resumeUploadedAt,
       };
-      const { profile: saved } = await api.profiles.save(stamped, token);
+      const { profile: saved } = await api.profiles.save(stamped);
       setProfile(saved);
       
       // Update the user object in AuthContext so the navbar reflects the new name

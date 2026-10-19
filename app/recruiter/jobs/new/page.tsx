@@ -67,7 +67,7 @@ const defaultJob: JobFormState = {
 
 export default function NewJobPage() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [job, setJob] = useState<JobFormState>(defaultJob);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [challenges, setChallenges] = useState<any[]>([]);
@@ -76,20 +76,20 @@ export default function NewJobPage() {
 
   useEffect(() => {
     const fetchChallenges = async () => {
-      if (!token) return;
+      if (!user) return;
       try {
-        const { challenges: data } = await api.proofhire.listChallenges(token);
+        const { challenges: data } = await api.proofhire.listChallenges();
         setChallenges(data);
       } catch (err) {
         console.error("Failed to fetch challenges:", err);
       }
     };
     fetchChallenges();
-  }, [token]);
+  }, [user]);
 
   async function handleSubmit(e: React.FormEvent, saveAsDraft: boolean = false) {
     e.preventDefault();
-    if (!token) return;
+    if (!user) return;
     
     setIsSubmitting(true);
     try {
@@ -103,7 +103,7 @@ export default function NewJobPage() {
         status: saveAsDraft ? "draft" : "published"
       };
 
-      await api.jobs.create(payload as any, token);
+      await api.jobs.create(payload as any);
       
       if (saveAsDraft) {
         alert("Job saved as draft!");

@@ -34,20 +34,20 @@ interface Job {
 
 export default function ArchivePage() {
   const router = useRouter();
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [closedJobs, setClosedJobs] = useState<Job[]>([]);
   const [allJobs, setAllJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!token || user?.role !== "recruiter") {
+    if (!user || user?.role !== "recruiter") {
       setIsLoading(false);
       return;
     }
 
     const fetchJobs = async () => {
       try {
-        const { jobs: jobList } = await api.jobs.listByRecruiter(token);
+        const { jobs: jobList } = await api.jobs.listByRecruiter();
         setAllJobs(jobList);
         setClosedJobs(jobList.filter((j: Job) => j.status === "closed"));
       } catch (err) {
@@ -58,7 +58,7 @@ export default function ArchivePage() {
     };
 
     fetchJobs();
-  }, [token, user?.role]);
+  }, [user]);
 
   const totalCandidates = allJobs.filter(j => j.status === "closed").length * 8; // placeholder calc
   const candidatesWithOutcome = Math.round(totalCandidates * 0.85); // 85% have outcomes

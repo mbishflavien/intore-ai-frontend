@@ -41,18 +41,18 @@ function getJobTitle(jobId: string, jobs: Job[]): string {
 }
 
 export default function ApplicantDashboard() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [applications, setApplications] = useState<any[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [stats, setStats] = useState({ total: 0, pending: 0, completed: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     const fetchApps = async () => {
       try {
-        const { applications: appList } = await api.applications.list(token);
+        const { applications: appList } = await api.applications.list();
         setApplications(appList);
         setStats({
           total: appList.length,
@@ -67,13 +67,12 @@ export default function ApplicantDashboard() {
     };
 
     fetchApps();
-  }, [token]);
+  }, [user]);
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const { jobs: jobList } = await api.jobs.list();
-        console.log("Jobs fetched:", jobList);
         setJobs(jobList);
       } catch (err) {
         console.error("Failed to fetch jobs:", err);
@@ -206,7 +205,7 @@ export default function ApplicantDashboard() {
                 <p className="text-xs text-slate-500">Check back later for new opportunities.</p>
               </div>
             ) : (
-              jobs.map((job) => (
+              jobs.slice(0, 5).map((job) => (
                 <Link key={job.id} href={`/applicant/jobs/${job.id}`} className="glass-card p-4 hover:border-sky-200 transition-all block group">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="text-sm font-bold text-on-surface leading-tight group-hover:text-sky-600 transition-colors">{job.title}</h4>

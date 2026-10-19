@@ -48,7 +48,7 @@ export default function InterviewerComparisonPage() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   const candidateId = params.id as string;
   const jobId = searchParams.get("jobId") ?? "";
@@ -58,13 +58,13 @@ export default function InterviewerComparisonPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
 
     const load = async () => {
       try {
         const [{ interviews: ivs }, { applications }] = await Promise.all([
-          api.interviews.list(token!),
-          api.jobs.getApplications(jobId, token!),
+          api.interviews.list(),
+          api.jobs.getApplications(jobId),
         ]);
         const candidateInterviews = ivs.filter(
           (iv: Interview) => iv.candidateId === candidateId
@@ -86,7 +86,7 @@ export default function InterviewerComparisonPage() {
     };
 
     load();
-  }, [token, candidateId, jobId]);
+  }, [user, candidateId, jobId]);
 
   const fullName = candidate?.fullName ?? "Candidate";
   const initials = fullName

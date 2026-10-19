@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Users, Briefcase, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import type { ApiError } from "@/lib/api";
+import { PasswordStrength, PASSWORD_MIN_LENGTH } from "@/components/PasswordStrength";
+import { Turnstile, TURNSTILE_SITE_KEY } from "@/components/Turnstile";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -17,17 +20,41 @@ export default function RegisterPage() {
   const [role, setRole] = useState<"applicant" | "recruiter">("applicant");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [passwordAcceptable, setPasswordAcceptable] = useState(false);
+  const [serverPasswordErrors, setServerPasswordErrors] = useState<string[]>([]);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
+
+  const handleStrength = useCallback(({ acceptable }: { acceptable: boolean }) => setPasswordAcceptable(acceptable), []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!passwordAcceptable) {
+      setError("Choose a stronger password.");
+      return;
+    }
     setIsLoading(true);
     setError("");
-    
+    setServerPasswordErrors([]);
+
     try {
-      await register(username.trim(), firstName.trim(), lastName.trim(), email.trim(), password, role);
+      await register({
+        username: username.trim(),
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        password,
+        role,
+        captchaToken: captchaToken ?? undefined,
+      });
       router.push(role === "recruiter" ? "/recruiter" : "/applicant");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed.");
+      const apiError = err as ApiError;
+      // The server also checks the common-password list and known breaches.
+      if (apiError.data?.passwordErrors) setServerPasswordErrors(apiError.data.passwordErrors);
+      setCaptchaToken(null);
+      setCaptchaReset((n) => n + 1);
+      setError(apiError.message || "Registration failed.");
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +97,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-2xl text-sm font-medium flex items-center gap-2">
+              <div role="alert" className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-2xl text-sm font-medium flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4" /> {error}
               </div>
             )}
@@ -127,20 +154,34 @@ export default function RegisterPage() {
 
               <label className="block">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">Password</span>
-                <input 
+                <input
                   type="password"
+                  autoComplete="new-password"
                   required
+                  minLength={PASSWORD_MIN_LENGTH}
+                  maxLength={128}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="At least 12 characters"
+                  aria-describedby="password-help"
                   className="w-full bg-white/50 border border-white/60 rounded-2xl px-4 py-4 focus:ring-4 ring-sky-500/10 outline-none transition-all placeholder:text-slate-300 font-medium"
                 />
               </label>
+              <div id="password-help">
+                <PasswordStrength password={password} userInputs={[username, email, firstName, lastName]} onChange={handleStrength} />
+                {serverPasswordErrors.length > 0 && (
+                  <ul className="mt-2 space-y-0.5 text-xs font-medium text-red-600">
+                    {serverPasswordErrors.map((message) => <li key={message}>{message}</li>)}
+                  </ul>
+                )}
+              </div>
             </div>
 
-            <button 
+            <Turnstile onToken={setCaptchaToken} resetKey={captchaReset} />
+
+            <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !passwordAcceptable || (Boolean(TURNSTILE_SITE_KEY) && !captchaToken)}
               className="w-full py-4 bg-gradient-to-r from-sky-400 to-indigo-500 text-white rounded-[20px] font-bold shadow-xl shadow-sky-200 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading ? (

@@ -50,7 +50,7 @@ export default function RecruiterJobDetailsPage() {
   const router = useRouter();
   const params = useParams();
   const jobId = params.id as string;
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [job, setJob] = useState<Job | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -74,10 +74,10 @@ export default function RecruiterJobDetailsPage() {
   }, [jobId]);
 
   const handlePublish = async () => {
-    if (!job || !token) return;
+    if (!job || !user) return;
     setIsUpdating(true);
     try {
-      const { job: updatedJob } = await api.jobs.publish(job.id, token);
+      const { job: updatedJob } = await api.jobs.publish(job.id);
       setJob(updatedJob);
       setMessage({ text: "Job published successfully!", type: "success" });
     } catch (err) {
@@ -88,10 +88,10 @@ export default function RecruiterJobDetailsPage() {
   };
 
   const handleClose = async () => {
-    if (!job || !token) return;
+    if (!job || !user) return;
     setIsUpdating(true);
     try {
-      const { job: updatedJob } = await api.jobs.close(job.id, token);
+      const { job: updatedJob } = await api.jobs.close(job.id);
       setJob(updatedJob);
       setMessage({ text: "Job closed successfully!", type: "success" });
     } catch (err) {
@@ -102,12 +102,12 @@ export default function RecruiterJobDetailsPage() {
   };
 
   const handleDelete = async () => {
-    if (!job || !token) return;
+    if (!job || !user) return;
     if (!confirm("Are you sure you want to delete this job?")) return;
 
     setIsUpdating(true);
     try {
-      await api.jobs.delete(job.id, token);
+      await api.jobs.delete(job.id);
       router.push("/recruiter/jobs");
     } catch (err) {
       setMessage({ text: "Failed to delete job", type: "error" });
@@ -116,10 +116,10 @@ export default function RecruiterJobDetailsPage() {
   };
 
   const handlePrepToggle = async () => {
-    if (!job || !token) return;
+    if (!job || !user) return;
     setIsPrepToggling(true);
     try {
-      const { job: updated } = await api.jobs.update(job!.id, { prepMode: !job!.prepMode } as any, token!);
+      const { job: updated } = await api.jobs.update(job!.id, { prepMode: !job!.prepMode } as any);
       setJob(updated as any);
       setMessage({ text: `Prep mode ${!job!.prepMode ? "enabled" : "disabled"}.`, type: "success" });
     } catch {

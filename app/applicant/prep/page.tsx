@@ -45,7 +45,7 @@ function loadAnswered(): Record<string, boolean> {
 }
 
 export default function PrepPage() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [modules, setModules] = useState<TrainingModule[]>([]);
   const [challenges, setChallenges] = useState<PracticeChallengeLite[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,12 +65,12 @@ export default function PrepPage() {
   }, []);
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     api.training
-      .listPracticeChallenges(token)
+      .listPracticeChallenges()
       .then(({ challenges: list }) => setChallenges(list))
       .catch((err) => console.error("Failed to load practice challenges:", err));
-  }, [token]);
+  }, [user]);
 
   useEffect(() => {
     setAnswered(loadAnswered());
@@ -323,7 +323,7 @@ export default function PrepPage() {
 
       {tab === "challenges" && (
         <section className="space-y-4">
-          {!token && (
+          {!user && (
             <Card padding="md" className="border-sky-200 bg-sky-50/50 text-center">
               <p className="text-sm font-semibold text-sky-800">
                 Sign in to open full employer challenges with instant, non-recorded evaluation.

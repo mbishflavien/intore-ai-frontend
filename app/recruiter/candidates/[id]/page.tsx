@@ -166,7 +166,7 @@ export default function CandidateScorecardPage() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   const candidateId = params.id as string;
   const jobId = searchParams.get("jobId") ?? "";
@@ -179,13 +179,13 @@ export default function CandidateScorecardPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!token || !jobId) return;
+    if (!user || !jobId) return;
 
     const load = async () => {
       setIsLoading(true);
       try {
         // Load applications for the job and find this candidate
-        const { applications } = await api.jobs.getApplications(jobId, token);
+        const { applications } = await api.jobs.getApplications(jobId);
         const app = applications.find((a) => a.applicantId === candidateId);
         if (app) setApplication(app);
 
@@ -195,12 +195,12 @@ export default function CandidateScorecardPage() {
         setCandidate(ranked);
 
         // Load interviews for this candidate
-        const { interviews: ivs } = await api.interviews.list(token);
+        const { interviews: ivs } = await api.interviews.list();
         setInterviews(ivs.filter((iv: Interview) => iv.candidateId === candidateId));
 
         // Load ProofHire results if available
         try {
-          const { submissions } = await api.proofhire.getResults(jobId, token);
+          const { submissions } = await api.proofhire.getResults(jobId);
           setProofSubmissions(submissions.filter((s: ProofSubmission) => s.applicantId === candidateId));
         } catch {
           // ProofHire may not be enabled for this job
@@ -213,7 +213,7 @@ export default function CandidateScorecardPage() {
     };
 
     load();
-  }, [token, jobId, candidateId]);
+  }, [user, jobId, candidateId]);
 
   const profile: TalentProfile | null = application?.profile ?? candidate?.profile ?? null;
   const totalScore = candidate?.score.total ?? 0;

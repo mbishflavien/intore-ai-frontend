@@ -47,7 +47,7 @@ function NavList({ items, pathname, collapsed, onNavigate, brandIcon: BrandIcon,
                 className={`rounded-full p-3 transition-all duration-300 hover:scale-110 ${
                   isActive
                     ? "bg-gradient-to-b from-sky-400 to-indigo-500 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)]"
-                    : "text-slate-400 hover:text-sky-500 dark:text-slate-500 dark:hover:text-sky-400"
+                    : "text-slate-400 hover:text-sky-500"
                 }`}
               >
                 <item.icon className="h-6 w-6" />
@@ -63,7 +63,7 @@ function NavList({ items, pathname, collapsed, onNavigate, brandIcon: BrandIcon,
               className={`flex min-h-[44px] items-center gap-3 rounded-2xl px-4 text-sm font-bold transition-all ${
                 isActive
                   ? "bg-gradient-to-r from-sky-400 to-indigo-500 text-white shadow-[0_0_20px_rgba(56,189,248,0.4)]"
-                  : "text-slate-500 hover:bg-white/50 hover:text-sky-600 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-sky-400"
+                  : "text-slate-500 hover:bg-white/50 hover:text-sky-600"
               }`}
             >
               <item.icon className="h-5 w-5 shrink-0" />
@@ -81,7 +81,7 @@ function NavList({ items, pathname, collapsed, onNavigate, brandIcon: BrandIcon,
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           aria-pressed={!collapsed}
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-3 text-slate-400 transition-all hover:scale-110 hover:text-sky-500 dark:text-slate-500 dark:hover:text-sky-400"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-3 text-slate-400 transition-all hover:scale-110 hover:text-sky-500"
         >
           {collapsed ? <ChevronsRight className="h-5 w-5" /> : <ChevronsLeft className="h-5 w-5" />}
         </button>
@@ -135,7 +135,7 @@ export function AppSidebar(props: AppSidebarProps) {
                   type="button"
                   onClick={onCloseMobile}
                   aria-label="Close menu"
-                  className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-slate-500 hover:bg-white/40 dark:text-slate-300"
+                  className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-slate-500 hover:bg-white/40"
                 >
                   <X className="h-5 w-5" />
                 </button>

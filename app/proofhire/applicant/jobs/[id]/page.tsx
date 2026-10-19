@@ -66,7 +66,7 @@ function formatClock(totalSeconds: number) {
 export default function ApplicantAssessmentPage() {
   const params = useParams();
   const jobId = params.id as string;
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [challenge, setChallenge] = useState<ChallengeData | null>(null);
   const [mode, setMode] = useState<"required" | "optional">("optional");
   const [code, setCode] = useState("");
@@ -84,8 +84,8 @@ export default function ApplicantAssessmentPage() {
 
   const codeRef = useRef(code);
   codeRef.current = code;
-  const tokenRef = useRef(token);
-  tokenRef.current = token;
+  const userRef = useRef(user);
+  userRef.current = user;
   const autoSubmittedRef = useRef(false);
 
   // Load challenge + prior submission; restore local draft backup.
@@ -130,8 +130,8 @@ export default function ApplicantAssessmentPage() {
         if (!cancelled) setMessage(error instanceof Error ? error.message : "Failed to load challenge");
       });
 
-    if (token) {
-      api.proofhire.getSubmission(jobId, token)
+    if (user) {
+      api.proofhire.getSubmission(jobId)
         .then(({ submission }) => {
           if (cancelled || !submission) return;
           setCode(submission.code);
@@ -150,7 +150,7 @@ export default function ApplicantAssessmentPage() {
     return () => {
       cancelled = true;
     };
-  }, [jobId, token]);
+  }, [jobId, user]);
 
   // Countdown ticker.
   useEffect(() => {
@@ -164,11 +164,11 @@ export default function ApplicantAssessmentPage() {
   }, [secondsLeft, timeUp]);
 
   const saveDraft = useCallback(async (silent = false) => {
-    const t = tokenRef.current;
+    const t = userRef.current;
     if (!t || !challenge) return;
     if (!silent) setSaving(true);
     try {
-      await api.proofhire.saveSubmission(jobId, { code: codeRef.current, language: "typescript" }, t);
+      await api.proofhire.saveSubmission(jobId, { code: codeRef.current, language: "typescript" });
       setLastSavedAt(new Date().toISOString());
       setDirty(false);
       setOfflineBackup(false);
@@ -188,11 +188,11 @@ export default function ApplicantAssessmentPage() {
   }, [challenge, jobId]);
 
   const submitForEvaluation = useCallback(async () => {
-    if (!tokenRef.current || autoSubmittedRef.current && timeUp) return;
+    if (!userRef.current || autoSubmittedRef.current && timeUp) return;
     setSubmitting(true);
     try {
-      await api.proofhire.saveSubmission(jobId, { code: codeRef.current, language: "typescript" }, tokenRef.current!);
-      const response = await api.proofhire.evaluateSubmission(jobId, tokenRef.current!);
+      await api.proofhire.saveSubmission(jobId, { code: codeRef.current, language: "typescript" });
+      const response = await api.proofhire.evaluateSubmission(jobId);
       if (response.evaluation) {
         setEvaluation(response.evaluation as { score: number; summary: string; strengths: string[]; gaps: string[] });
       }
@@ -214,7 +214,7 @@ export default function ApplicantAssessmentPage() {
 
   // Auto-submit once when the timer hits zero.
   useEffect(() => {
-    if (timeUp && !autoSubmittedRef.current && !evaluation && tokenRef.current) {
+    if (timeUp && !autoSubmittedRef.current && !evaluation && userRef.current) {
       autoSubmittedRef.current = true;
       setMessage("Time is up — auto-submitting your solution.");
       void submitForEvaluation();
@@ -223,7 +223,7 @@ export default function ApplicantAssessmentPage() {
 
   // Autosave every 30s when dirty.
   useEffect(() => {
-    if (!challenge || !token) return;
+    if (!challenge || !user) return;
     const t = window.setInterval(() => {
       if (codeRef.current.trim().length > 0) {
         // Always refresh the local backup; hit the API when dirty.
@@ -236,7 +236,7 @@ export default function ApplicantAssessmentPage() {
       }
     }, AUTOSAVE_MS);
     return () => window.clearInterval(t);
-  }, [challenge, token, dirty, jobId, saveDraft]);
+  }, [challenge, user, dirty, jobId, saveDraft]);
 
   // Warn on accidental navigation with unsaved work.
   useEffect(() => {
@@ -414,10 +414,10 @@ export default function ApplicantAssessmentPage() {
 
         {/* Desktop actions */}
         <div className="mt-4 hidden flex-wrap gap-3 sm:flex">
-          <Button variant="secondary" onClick={() => saveDraft()} loading={saving} disabled={!token || timeUp}>
+          <Button variant="secondary" onClick={() => saveDraft()} loading={saving} disabled={!user || timeUp}>
             <Save className="h-4 w-4" aria-hidden="true" /> Save Draft
           </Button>
-          <Button variant="primary" onClick={submitForEvaluation} loading={submitting} disabled={!token}>
+          <Button variant="primary" onClick={submitForEvaluation} loading={submitting} disabled={!user}>
             <Send className="h-4 w-4" aria-hidden="true" /> Submit for Evaluation
           </Button>
         </div>
@@ -426,10 +426,10 @@ export default function ApplicantAssessmentPage() {
         )}
         {/* Mobile sticky action bar */}
         <div className="sticky bottom-3 mt-4 flex gap-3 rounded-2xl border border-white/60 bg-white/85 p-3 shadow-lg backdrop-blur-xl sm:hidden">
-          <Button variant="secondary" onClick={() => saveDraft()} loading={saving} disabled={!token || timeUp} className="flex-1">
+          <Button variant="secondary" onClick={() => saveDraft()} loading={saving} disabled={!user || timeUp} className="flex-1">
             <Save className="h-4 w-4" aria-hidden="true" /> Save
           </Button>
-          <Button variant="primary" onClick={submitForEvaluation} loading={submitting} disabled={!token} className="flex-1">
+          <Button variant="primary" onClick={submitForEvaluation} loading={submitting} disabled={!user} className="flex-1">
             <Send className="h-4 w-4" aria-hidden="true" /> Submit
           </Button>
         </div>

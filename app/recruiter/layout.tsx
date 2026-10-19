@@ -17,6 +17,7 @@ import {
   LogOut,
   Clock,
   Menu,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -31,7 +32,7 @@ export default function RecruiterLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout, isLoading, token } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -39,9 +40,9 @@ export default function RecruiterLayout({
   const { collapsed, toggleCollapsed, mobileOpen, setMobileOpen } = useSidebar();
 
   const fetchNotifications = async () => {
-    if (!token) return;
+    if (!user) return;
     try {
-      const data = await api.notifications.listUnread(token);
+      const data = await api.notifications.listUnread();
       setUnreadCount(data.unreadCount);
       setNotifications(data.notifications);
     } catch (err) {
@@ -64,12 +65,12 @@ export default function RecruiterLayout({
 
   // Fetch notifications on mount and poll every 30 seconds
   useEffect(() => {
-    if (!token || user?.role !== "recruiter") return;
+    if (!user || user?.role !== "recruiter") return;
     
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
-  }, [token, user?.role]);
+  }, [user]);
 
   // Handle click outside notifications
   useEffect(() => {
@@ -86,9 +87,9 @@ export default function RecruiterLayout({
     const nextState = !isNotificationsOpen;
     setIsNotificationsOpen(nextState);
 
-    if (nextState && unreadCount > 0 && token) {
+    if (nextState && unreadCount > 0 && user) {
       try {
-        await api.notifications.markRecruiterFeedRead(token);
+        await api.notifications.markRecruiterFeedRead();
         setUnreadCount(0);
       } catch (err) {
         console.error("Failed to mark notifications as read:", err);
@@ -110,19 +111,20 @@ export default function RecruiterLayout({
     { icon: Users, href: "/recruiter/talent", label: "Talent Pool" },
     { icon: FolderHeart, href: "/recruiter/archive", label: "Archive" },
     { icon: Lock, href: "/recruiter/admin", label: "Admin" },
+    { icon: ShieldCheck, href: "/recruiter/security", label: "Security" },
   ];
 
   return (
     <div className="min-h-screen bg-aura-gradient">
       {/* Top Glass Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center max-w-7xl mx-auto bg-white/40 backdrop-blur-2xl rounded-2xl mt-4 mx-4 px-4 py-3 border border-white/20 shadow-[0_20px_50px_rgba(56,189,248,0.1)] sm:mx-6 sm:px-6 dark:bg-slate-900/60 dark:border-white/10">
+      <header className="fixed top-4 inset-x-4 z-50 flex justify-between items-center bg-white/40 backdrop-blur-2xl rounded-2xl px-4 py-3 border border-white/20 shadow-[0_20px_50px_rgba(56,189,248,0.1)] sm:inset-x-6 sm:px-6">
         <div className="flex items-center gap-2 sm:gap-4">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
             aria-expanded={mobileOpen}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 text-slate-500 transition-all hover:bg-white/20 lg:hidden dark:text-slate-300"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 text-slate-500 transition-all hover:bg-white/20 lg:hidden"
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -226,7 +228,7 @@ export default function RecruiterLayout({
             href="/recruiter/jobs/new"
             aria-label="Create new job"
             title="Create new job"
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-sky-400/30 text-sky-500 shadow-sm transition-colors hover:bg-sky-50 dark:hover:bg-white/10"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-sky-400/30 text-sky-500 shadow-sm transition-colors hover:bg-sky-50"
           >
             <Plus className="h-6 w-6" />
           </Link>

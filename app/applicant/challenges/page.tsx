@@ -20,20 +20,20 @@ import { api } from "@/lib/api";
 import { JobListSkeleton } from "@/components/ui";
 
 export default function MyChallengesPage() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState<any | null>(null);
 
   useEffect(() => {
-    if (!token) return;
-    api.proofhire.listMySubmissions(token)
+    if (!user) return;
+    api.proofhire.listMySubmissions()
       .then(res => {
         setSubmissions(res.submissions);
       })
       .catch(err => console.error(err))
       .finally(() => setIsLoading(false));
-  }, [token]);
+  }, [user]);
 
   if (isLoading) {
     return (

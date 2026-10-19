@@ -38,7 +38,7 @@ import { getTalentProfileFullName } from "@/lib/types";
 type Mode = "parse" | "challenges";
 
 export default function TalentScanner() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [mode, setMode] = useState<Mode>("parse");
   const [isParsing, setIsParsing] = useState(false);
   const [parsedProfile, setParsedProfile] = useState<TalentProfile | null>(null);
@@ -70,7 +70,7 @@ export default function TalentScanner() {
   });
 
   useEffect(() => {
-    if (!token) return;
+    if (!user) return;
     
     if (user?.role !== "recruiter") {
       setStatus("Access denied. Recruiter role required.");
@@ -78,17 +78,17 @@ export default function TalentScanner() {
     }
 
     if (mode === "challenges") {
-      Promise.all([api.proofhire.listChallenges(token), api.proofhire.templates()])
+      Promise.all([api.proofhire.listChallenges(), api.proofhire.templates()])
         .then(([challengeRes, templateRes]) => {
           setChallenges(challengeRes.challenges);
           setTemplates(templateRes.templates);
         })
         .catch(() => setStatus("Failed to load scanner resources."));
     }
-  }, [token, mode]);
+  }, [user, mode]);
 
   const handleFileUpload = async (files: FileList | null) => {
-    if (!files || files.length === 0 || !token) return;
+    if (!files || files.length === 0 || !user) return;
     
     setIsParsing(true);
     setStatus("Parsing resume...");
@@ -103,7 +103,7 @@ export default function TalentScanner() {
       const bytes = await file.arrayBuffer();
       const base64 = arrayBufferToBase64(bytes);
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000"}/api/ingest/resume`, {
+      const response = await fetch(`/api/ingest/resume`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mimeType: file.type || "application/pdf", base64 }),
@@ -129,12 +129,12 @@ export default function TalentScanner() {
   const handleCreateChallenge = async () => {
     console.log("handleCreateChallenge called");
     console.log("editingChallenge:", editingChallenge);
-    if (!token) return;
+    if (!user) return;
     setIsSavingChallenge(true);
     try {
       console.log("Making API call...");
-      await api.proofhire.createChallenge(editingChallenge, token);
-      const res = await api.proofhire.listChallenges(token);
+      await api.proofhire.createChallenge(editingChallenge);
+      const res = await api.proofhire.listChallenges();
       setChallenges(res.challenges);
       setIsCreatingChallenge(false);
       setStatus("Challenge created successfully.");
