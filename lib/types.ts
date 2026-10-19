@@ -511,6 +511,7 @@ export interface Job {
   dealbreakers?: string[];
   screeningWeights: ScoreWeights;
   proofHire: ProofHireConfig;
+  prepMode?: boolean;
   status: JobStatus;
   createdAt: string;
   updatedAt: string;
